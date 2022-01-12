@@ -55,8 +55,8 @@ This repository is
 
 ### Prerequisites
 
-nRF52 Developer Kit
-USB-2B Cable
+nRF52 Developer Kit <br>
+USB-2B Cable <br>
 IDE that supports C
 
 ### Installation
