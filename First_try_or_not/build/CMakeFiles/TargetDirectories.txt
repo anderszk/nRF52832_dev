@@ -53,9 +53,9 @@ C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/CMakeFiles/edit_
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/CMakeFiles/rebuild_cache.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/libc/CMakeFiles/edit_cache.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/libc/CMakeFiles/rebuild_cache.dir
-C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/libc/minimal/CMakeFiles/lib__libc__minimal.dir
-C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/libc/minimal/CMakeFiles/edit_cache.dir
-C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/libc/minimal/CMakeFiles/rebuild_cache.dir
+C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/libc/newlib/CMakeFiles/lib__libc__newlib.dir
+C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/libc/newlib/CMakeFiles/edit_cache.dir
+C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/libc/newlib/CMakeFiles/rebuild_cache.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/posix/CMakeFiles/lib__posix.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/posix/CMakeFiles/edit_cache.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/posix/CMakeFiles/rebuild_cache.dir
@@ -93,6 +93,8 @@ C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/subsys/bluetooth/com
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/subsys/bluetooth/host/CMakeFiles/edit_cache.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/subsys/bluetooth/host/CMakeFiles/rebuild_cache.dir
+C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/subsys/bluetooth/services/CMakeFiles/edit_cache.dir
+C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/subsys/bluetooth/services/CMakeFiles/rebuild_cache.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/subsys/fs/CMakeFiles/edit_cache.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/subsys/fs/CMakeFiles/rebuild_cache.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/subsys/ipc/CMakeFiles/edit_cache.dir
@@ -191,6 +193,8 @@ C:/nsc_skd_1_9_1/applications/First_try_or_not/build/modules/nrf/subsys/bluetoot
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/modules/nrf/subsys/bluetooth/controller/CMakeFiles/edit_cache.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/modules/nrf/subsys/bluetooth/controller/CMakeFiles/..__nrf__subsys__bluetooth__controller.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/modules/nrf/subsys/bluetooth/controller/CMakeFiles/rebuild_cache.dir
+C:/nsc_skd_1_9_1/applications/First_try_or_not/build/modules/nrf/subsys/bluetooth/services/CMakeFiles/edit_cache.dir
+C:/nsc_skd_1_9_1/applications/First_try_or_not/build/modules/nrf/subsys/bluetooth/services/CMakeFiles/rebuild_cache.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/modules/nrf/subsys/net/CMakeFiles/edit_cache.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/modules/nrf/subsys/net/CMakeFiles/rebuild_cache.dir
 C:/nsc_skd_1_9_1/applications/First_try_or_not/build/modules/nrf/subsys/net/lib/CMakeFiles/edit_cache.dir

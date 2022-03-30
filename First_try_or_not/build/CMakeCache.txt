@@ -39,7 +39,7 @@ CACHED_BOARD:STRING=nrf52840dk_nrf52840
 // listed, e.g. CONF_FILE="prj1.confi;prj2.conf" The CACHED_CONF_FILE
 // is internal Zephyr variable used between CMake runs. To change
 // CONF_FILE, use the CONF_FILE variable.
-CACHED_CONF_FILE:STRING=C:/nsc_skd_1_9_1/applications/First_try_or_not/prj.conf
+CACHED_CONF_FILE:STRING=c:/nsc_skd_1_9_1/applications/First_try_or_not/prj.conf
 
 //Selected shield
 CACHED_SHIELD:STRING=
@@ -494,7 +494,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=128
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=130
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -550,6 +550,4 @@ _Python3_EXECUTABLE:INTERNAL=C:/nsc_skd_1_9_1/v1.9.1/toolchain/opt/bin/python.ex
 //Python3 Properties
 _Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;8;2;64;;cp38-win_amd64.pyd;C:\nsc_skd_1_9_1\v1.9.1\toolchain\opt\bin\Lib;C:\nsc_skd_1_9_1\v1.9.1\toolchain\opt\bin\Lib;C:\nsc_skd_1_9_1\v1.9.1\toolchain\opt\bin\Lib\site-packages;C:\nsc_skd_1_9_1\v1.9.1\toolchain\opt\bin\Lib\site-packages
 _Python3_INTERPRETER_SIGNATURE:INTERNAL=834550fe134d69c737ea7df027e2b059
-//Test check_fmacro_prefix_map_C__nsc_skd_1_9_1_applications_First_try_or_not_CMAKE_SOURCE_DIR_C__nostartfiles__nostdlib__isystem__c__nsc_skd_1_9_1_v1_9_1_toolchain_opt_bin____lib_gcc_arm_none_eabi_9_2_1_include___isystem__c__nsc_skd_1_9_1_v1_9_1_toolchain_opt_bin____lib_gcc_arm_none_eabi_9_2_1_include_fixed___Wl___unresolved_symbols_ignore_in_object_files__Wl___entry_0
-check_fmacro_prefix_map_C__nsc_skd_1_9_1_applications_First_try_or_not_CMAKE_SOURCE_DIR_C__nostartfiles__nostdlib__isystem__c__nsc_skd_1_9_1_v1_9_1_toolchain_opt_bin____lib_gcc_arm_none_eabi_9_2_1_include___isystem__c__nsc_skd_1_9_1_v1_9_1_toolchain_opt_bin____lib_gcc_arm_none_eabi_9_2_1_include_fixed___Wl___unresolved_symbols_ignore_in_object_files__Wl___entry_0:INTERNAL=1
 

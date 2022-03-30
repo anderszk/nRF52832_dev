@@ -254,7 +254,7 @@ rule C_STATIC_LIBRARY_LINKER__arch__arm__core__aarch32__mpu_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__lib__libc__minimal_
+rule C_COMPILER__lib__libc__newlib_
   depfile = $DEP_FILE
   deps = gcc
   command = C:\nsc_skd_1_9_1\v1.9.1\toolchain\opt\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -264,7 +264,7 @@ rule C_COMPILER__lib__libc__minimal_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__lib__libc__minimal_
+rule C_STATIC_LIBRARY_LINKER__lib__libc__newlib_
   command = cmd.exe /C "$PRE_LINK && C:\nsc_skd_1_9_1\v1.9.1\toolchain\opt\bin\cmake.exe -E rm -f $TARGET_FILE && C:\nsc_skd_1_9_1\v1.9.1\toolchain\opt\bin\arm-none-eabi-ar.exe qc $TARGET_FILE $LINK_FLAGS $in && C:\nsc_skd_1_9_1\v1.9.1\toolchain\opt\bin\arm-none-eabi-ranlib.exe $TARGET_FILE && $POST_BUILD"
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT

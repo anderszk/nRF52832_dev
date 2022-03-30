@@ -47,3 +47,8 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/subsys/bluetooth/host/cmake_install.cmake")
 endif()
 
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/subsys/bluetooth/services/cmake_install.cmake")
+endif()
+

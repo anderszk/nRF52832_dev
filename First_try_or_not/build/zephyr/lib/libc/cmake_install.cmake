@@ -39,6 +39,6 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/libc/minimal/cmake_install.cmake")
+  include("C:/nsc_skd_1_9_1/applications/First_try_or_not/build/zephyr/lib/libc/newlib/cmake_install.cmake")
 endif()
 

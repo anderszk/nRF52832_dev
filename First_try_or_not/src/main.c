@@ -17,6 +17,16 @@
 void main(void)
 {
 	
+	
+	timer_init();
+	timer_start();
 	configure_dk_buttons_leds();
 	init_bluethooth_scan();
+
+	for(;;){
+
+
+	}
+
+
 }

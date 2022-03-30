@@ -9,9 +9,13 @@ FILE(GLOB app_sources src/*.c)
 target_sources(app PRIVATE ${app_sources}
 src/custom_files/kalman_filter.c;
 src/custom_files/observer.c;
-src/custom_files/button_leds.c)
+src/custom_files/button_leds.c;
+src/custom_files/servo_control.c
+)
 
 zephyr_library_include_directories(
     ${ZEPHYR_BASE}/samples/bluetooth
     src/custom_files)
+
+
 
