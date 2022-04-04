@@ -57,7 +57,8 @@ This repository is
 
 nRF52 Developer Kit <br>
 USB-2B Cable <br>
-IDE that supports C
+IDE that supports C (VSCode) <br>
+
 
 ### Installation
 
