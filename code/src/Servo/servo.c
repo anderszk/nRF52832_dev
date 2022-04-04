@@ -1,4 +1,7 @@
-#include "servo_control.h"
+#include "servo.h"
+#define LOG_MODULE_NAME SERVO
+
+LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 //Configure pins
 
@@ -24,7 +27,7 @@ static uint32_t pwmN_timer_cc_num[] = PWMN_TIMER_CC_NUM;
 // Timer CC register use to reset the timer.
 #define TIMER_RELOAD_CC_NUM 5
 
-void timer_init()
+int timer_init()
 {
     NRF_TIMER3->BITMODE                 = TIMER_BITMODE_BITMODE_24Bit << TIMER_BITMODE_BITMODE_Pos;
     NRF_TIMER3->PRESCALER               = 0;
@@ -32,14 +35,16 @@ void timer_init()
     NRF_TIMER3->MODE                    = TIMER_MODE_MODE_Timer << TIMER_MODE_MODE_Pos;
     NRF_TIMER3->CC[TIMER_RELOAD_CC_NUM] = TIMER_RELOAD;
 
-    printk("Timer initialized.\n");
+    LOG_INF("Timer initialized.");
+    return 0 ;
 }
 
-void timer_start()
+int timer_start()
 {
     NRF_TIMER3->TASKS_START = 1;
     
-    printk("Timer started.\n");
+    LOG_INF("Timer started.");
+    return 0;
 }
 
 uint32_t convert_to_raw(uint32_t value)
@@ -50,11 +55,12 @@ uint32_t convert_to_raw(uint32_t value)
     return angle;
 }
 
-void servo_init(uint32_t N, int servo_pin)
+int servo_init(uint32_t N, int servo_pin)
 {
+    int err;
     if(N>3) {
         // Invalid N.
-        return;
+        return 1;
     }
     
     NRF_GPIOTE->CONFIG[pwmN_gpiote_ch[N]] = GPIOTE_CONFIG_MODE_Task << GPIOTE_CONFIG_MODE_Pos |
@@ -72,7 +78,8 @@ void servo_init(uint32_t N, int servo_pin)
     }
     NRF_PPI->CHENSET                      = (1 << pwmN_ppi_ch_a[N]) | (1 << pwmN_ppi_ch_b[N]);
 
-    printk("Initializing servo %u on pin %i success!\n", N, servo_pin);
+    LOG_INF("Initializing servo %u on pin %i success!\n", N, servo_pin);
+    return err=0;
 }
 
 
@@ -82,7 +89,7 @@ void raw_move_servo(int N, uint32_t position)
 {
     if (N > 3)
     {
-        printk("Invalid N, %u > 3", N);
+        LOG_INF("Invalid N, %u > 3", N);
         return;
     }
     if (position <= 0)
@@ -108,3 +115,4 @@ void angle_move_servo(int N, uint32_t angle)
     angle = convert_to_raw(angle);
     raw_move_servo(N, angle);
 }
+

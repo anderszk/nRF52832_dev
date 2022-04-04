@@ -1,17 +1,17 @@
 #include <zephyr.h>
-#include <sys/printk.h>
+#include <logging/log.h>
 
 /**
  * @brief Init timer
  * 
  */
-void timer_init();
+int timer_init();
 
 /**
  * @brief Start timer
  * 
  */
-void timer_start();
+int timer_start();
 
 /**
 *@brief Funciton that initializes servo on specified pin.
@@ -20,7 +20,7 @@ void timer_start();
 * @param N Servo numer, from 0 to 3
 * @param servo_pin Pin where servo is connected
 */
-void servo_init(uint32_t N, int servo_pin);
+int servo_init(uint32_t N, int servo_pin);
 
 /**
  * @brief Move servo to angle given in degrees
@@ -56,3 +56,5 @@ void raw_move_servo(int N, uint32_t position);
 //Decrement servo
 
 //Sweep motion, speed.
+
+uint32_t sin_scaled(uint32_t input, uint32_t input_max, uint32_t output_min, uint32_t output_max);
