@@ -7,6 +7,7 @@ bool send_data_state = false;
 
 void set_observer(bool state){
 	send_data_state = state;
+	LOG_INF("Observer state changed to %d", send_data_state);
 }
 
 void set_switch(int state){
@@ -18,10 +19,10 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 {	
 	if(send_data_state){
     	// rssi = KALMAN(rssi);
-    	LOG_INF("%d",rssi);
 		static int counter = 0;
 		static bool state = false; // 0 = delta, 1 = zigma, 2 = done
 		if(!state){
+			LOG_INF("counter: %d, rssi: %d",counter,rssi);
 			send_data_delta(rssi, counter);
 			counter +=1;
 			if(counter > 4){
@@ -30,6 +31,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 			}
 		}
 		else if(state){
+			LOG_INF("counter: %d, rssi: %d",counter,rssi);
 			send_data_zigma(rssi, counter);
 			counter += 1;
 			if(counter > 4){
@@ -37,6 +39,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 				counter = 0;
 				set_observer(false);
 				k_sem_give(&my_sem);
+				LOG_INF("given");
 			}
 		}
 

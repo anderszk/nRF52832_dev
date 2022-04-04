@@ -6,3 +6,7 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 void test_me_3(){
     LOG_INF("dsadsahehhehehe");
 }
+
+int get_encoder(){
+    return 0;
+}

@@ -15,10 +15,11 @@
 K_SEM_DEFINE(my_sem,0,1);
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
-int azimuth_reading[270];
-int nulls_azimuth[];
+int azimuth_reading[270][3];
+int nulls_azimuth[1];
 int min_encoder_search = 0;
 int max_encoder_search = 270;
+int increment = 1;
 
 void main(void)
 {
@@ -27,5 +28,7 @@ void main(void)
 	test_me();
 	test_me_2();
 	test_me_3();
-
+	k_sem_give(&my_sem);
+	int err = sweep_search(0, min_encoder_search, max_encoder_search,increment);
+	for(;;);
 }
