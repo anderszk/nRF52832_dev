@@ -76,11 +76,11 @@ Hybrid 180 degrees coupler <br>
 ### Installation
 
 2. Clone the repo using:
-   ```sh
+   ```
    $git clone https://github.com/anderszk/nRF52832_dev.git`
-   ``
+   ```
 3. Install SDK and Toolchain here:
-   ``sh
+   ```
    https://www.nordicsemi.com/Products/Development-software/nRF5-SDK/Download#infotabs
    ```
 4. Connect the nRF52 Developer chip to your computer
