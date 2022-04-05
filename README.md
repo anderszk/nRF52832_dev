@@ -1,5 +1,5 @@
 
-<h1 align="center">nRF52 Developing</h1>
+<h1 align="center">Direction finding using nRF52832</h1>
 
 
 
