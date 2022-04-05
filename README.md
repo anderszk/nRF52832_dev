@@ -1,8 +1,6 @@
 
-<h1 align="center">Direction finding using nRF52832</h1>
-
-<br><br>
-
+<br>
+<h1 align="center" style="padding-bottom: 200px;">Direction finding using nRF52832</h1>
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
