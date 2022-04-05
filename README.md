@@ -114,7 +114,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 contact person? - 
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
