@@ -32,7 +32,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This repository is containg all the code and documention for our project for direction finding using an antenna patch array and a robot arm. We are implementing the program using C and Nordic Semiconductors SDK. The ```code ```-folder contains the source code, excluding the build as you will need to do this by yourself when testing the system. This program is applied to a system, which is described under prerequisites.
+This repository is containg all the code and documention for our project for direction finding using an antenna patch array and a robot arm. We are implementing the program using C and Nordic Semiconductors SDK. The ```code```-folder contains the source code, excluding the build as you will need to do this by yourself when testing the system. This program is applied to a system, which is described under prerequisites.
 
 We have used the nRF52832 DK and are currently working on making the code more dynamic, so it can be used on other development kits, such as nRF52840. Most of the code regarding BLE are used from the example codes in the SDK, and we have focused on developing the algorithms used to maneuver the servo, reading the enocder and the searching algorithm itself.
 
@@ -76,17 +76,11 @@ Hybrid 180 degrees coupler <br>
 ### Installation
 
 2. Clone the repo using:
-   ```sh
-   $git clone https://github.com/anderszk/nRF52832_dev.git
-   ```
+   ```$git clone https://github.com/anderszk/nRF52832_dev.git```
 3. Install SDK and Toolchain here:
-   ```sh
-    https://www.nordicsemi.com/Products/Development-software/nRF5-SDK/Download#infotabs
-   ```
+   ``https://www.nordicsemi.com/Products/Development-software/nRF5-SDK/Download#infotabs```
 4. Connect the nRF52 Developer chip to your computer
-5. Start building using the interface or ```sh
-    CTRL+P -> build
-   ```
+5. Start building using the interface or ```CTRL+P -> build```
   
 
 <p align="right">(<a href="#top">back to top</a>)</p>
