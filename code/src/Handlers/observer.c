@@ -26,7 +26,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 		static int counter = 0;
 		static bool delta_zigma_state = false; // 0 = delta, 1 = zigma, 2 = done
 		if(!delta_zigma_state){
-			printk("counter: %d, rssi: %d, zigma: %d\n",counter,rssi,delta_zigma_state);
+			// printk("counter: %d, rssi: %d, zigma: %d\n",counter,rssi,delta_zigma_state);
 			send_data_delta(rssi, counter);
 			counter +=1;
 			if(counter >= average_counter){
@@ -36,7 +36,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 			}
 		}
 		else if(delta_zigma_state){
-			printk("counter: %d, rssi: %d, zigma: %d \n",counter,rssi, delta_zigma_state);
+			// printk("counter: %d, rssi: %d, zigma: %d \n",counter,rssi, delta_zigma_state);
 			send_data_zigma(rssi, counter);
 			counter += 1;
 			if(counter >= average_counter){
