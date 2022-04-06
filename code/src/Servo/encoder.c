@@ -8,5 +8,7 @@ void test_me_3(){
 }
 
 int get_encoder(){
-    return 0;
+    static int value = -1;
+    value+=1;
+    return value;
 }

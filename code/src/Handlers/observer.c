@@ -1,13 +1,17 @@
 #include "observer.h"
 #define LOG_MODULE_NAME Observer
+#define average_counter 5
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 extern struct k_sem my_sem; 
 bool send_data_state = false;
 
-void set_observer(bool state){
+int set_observer(bool state){
+	int err = 1;
 	send_data_state = state;
-	LOG_INF("Observer state changed to %d", send_data_state);
+	printk("Observer state changed to %d\n", send_data_state);
+	return err = 0;
+
 }
 
 void set_switch(int state){
@@ -20,32 +24,36 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 	if(send_data_state){
     	// rssi = KALMAN(rssi);
 		static int counter = 0;
-		static bool state = false; // 0 = delta, 1 = zigma, 2 = done
-		if(!state){
-			LOG_INF("counter: %d, rssi: %d",counter,rssi);
+		static bool delta_zigma_state = false; // 0 = delta, 1 = zigma, 2 = done
+		if(!delta_zigma_state){
+			printk("counter: %d, rssi: %d, zigma: %d\n",counter,rssi,delta_zigma_state);
 			send_data_delta(rssi, counter);
 			counter +=1;
-			if(counter > 4){
+			if(counter >= average_counter){
 				counter = 0;
-				state = true;
+				delta_zigma_state = true;
+				
 			}
 		}
-		else if(state){
-			LOG_INF("counter: %d, rssi: %d",counter,rssi);
+		else if(delta_zigma_state){
+			printk("counter: %d, rssi: %d, zigma: %d \n",counter,rssi, delta_zigma_state);
 			send_data_zigma(rssi, counter);
 			counter += 1;
-			if(counter > 4){
-				state = false;
+			if(counter >= average_counter){
+				delta_zigma_state = false;
 				counter = 0;
 				set_observer(false);
 				k_sem_give(&my_sem);
-				LOG_INF("given");
+				printk("given\n");
+				
 			}
 		}
 
 	}
 
-	else{return;}
+	else{printk("rssi: %d\n", rssi);}
+
+	
 
 
 
@@ -79,7 +87,7 @@ int init_bluethooth_scan(){
 		.window     = BT_GAP_SCAN_FAST_WINDOW,
 	};
 	int err;
-	LOG_INF("Starting Observer\n");
+	printk("Starting Observer\n");
 	/* Initialize the Bluetooth Subsystem */
 	err = bt_enable(NULL);
 	if (err) {
@@ -91,7 +99,7 @@ int init_bluethooth_scan(){
 		LOG_ERR("Could not add to acceptlist (error: %d)", err);
 		return err;
 	}    
-	LOG_INF("Bluetooth initialized\n");
+	printk("Bluetooth initialized\n");
 
 	err = bt_le_scan_start(&scan_param, device_found);
 	if (err) {

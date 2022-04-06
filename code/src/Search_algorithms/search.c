@@ -5,35 +5,30 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 extern struct k_sem my_sem;
 
-struct data_array{
-    int a[1][3];
-};
-
-void test_me(){
-    LOG_INF("hehhehehe");
-}
-
-int sweep_search(bool state, int min_encoder_search, int max_encoder_search, int increment){
-    LOG_INF("Starting to search in Azimuth");
-    int readings[270][3] = {0};
-    int index = 0;
-    for (int i = min_encoder_search; i < max_encoder_search; i+= increment){
-        //move_servo(state, i) bevege servo enten i asimuth til enkoder verdi i
-        LOG_INF("start");
-        LOG_INF("started");
+int16_t **sweep_search(bool state, int min_encoder_search, int16_t max_encoder_search, int increment){
+    printk("Starting to search in Azimuth\n");
+    static int16_t readings[][3] = {0};
+    int16_t index = 0;
+    for (int i = 0; i < 10; i+= 1){
+        //move_servo(state, i) bevege servo enten i asimuth til enkoder verdi i (ikke implementert enda)
+        int16_t *buffer_data;
+        printk("started\n");
         set_observer(true);
-        LOG_INF("waiting");
+        printk("waiting\n");
         k_sem_take(&my_sem, K_FOREVER);
-        LOG_INF("next");
-        // struct data_array *buffer_data = get_data();
-        // for (int i = 0; i < 3; i++){
-        //     readings[index][i] = &buffer_data->a[0][i];
-        // }
-        // int encoder = &buffer_data->a[0][0];
-        // int delta = &buffer_data->a[0][1];
-        // int zigma = &buffer_data->a[0][2];
-        // LOG_INF("Encoder: %d, Delta: %d, Zigma %d",encoder, delta, zigma);
+        printk("next\n");
+        buffer_data = get_data();
+        for (int i = 0; i < 3; i++){
+            readings[index][i] = buffer_data[i];
+        }
+        int16_t encoder = readings[index][0];
+        int16_t delta = readings[index][1];
+        int16_t zigma = readings[index][2];
+        printk("Encoder: %d, Delta: %d, Zigma %d, i: %d: \n",encoder, delta, zigma, index);
+        index+=1;
     }
 
-    return 0;
+    k_sem_give(&my_sem);
+    printk("Azimuth search done\n");
+    return readings;
 }

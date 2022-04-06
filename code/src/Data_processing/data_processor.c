@@ -1,14 +1,12 @@
 #include "data_processor.h"
 
 #define LOG_MODULE_NAME DATA_PROCESSOR
+#define average_counter 5
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
-struct data_array{
-    int a[1][3];
-};
 
-int8_t data_delta[5];
-int8_t data_zigma[5];
+int8_t data_delta[average_counter];
+int8_t data_zigma[average_counter];
 
 void send_data_delta(int8_t rssi, int index){
     data_delta[index] = rssi;
@@ -17,21 +15,20 @@ void send_data_zigma(int8_t rssi, int index){
     data_zigma[index] = rssi;
 }
 
-int *get_data(){
+int16_t *get_data(){
 
-    struct data_array *buffer_data;
-    buffer_data->a[0][0] = get_encoder();
-    buffer_data->a[0][1] = get_average(data_delta);
-    buffer_data->a[0][2] = get_average(data_zigma);
+    static int16_t buffer_data[3];
+    buffer_data[0] = (int16_t) get_encoder();
+    buffer_data[1] = (int16_t) get_average(data_delta);
+    buffer_data[2] = (int16_t) get_average(data_zigma);
 
-    return &buffer_data;
-
+    return buffer_data;
 
 }
 
-int8_t get_average(int8_t list[]){
+int8_t get_average(int8_t *list){
     int16_t average = 0;
-    int size = sizeof(list) +1;
+    int8_t size = average_counter;
     for(int i = 0; i < size; i++){
         average += list[i];
     }
@@ -41,9 +38,7 @@ int8_t get_average(int8_t list[]){
 
 
 
-void test_me_2(){
-    LOG_INF("aaaaaahehhehehe");
-}
+
 
 // int find_local_minima(int data_array[][3]){
 

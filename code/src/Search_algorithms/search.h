@@ -1,7 +1,6 @@
-#include "data_processor.h"
 #include "observer.h"
 
 
 
 void test_me();
-int sweep_search(bool state, int min_encoder_search, int max_encoder_search, int increment);
+int16_t **sweep_search(bool state, int min_encoder_search, int16_t max_encoder_search, int increment);
