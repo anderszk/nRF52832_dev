@@ -1,6 +1,6 @@
 #include "observer.h"
 #define LOG_MODULE_NAME Observer
-#define average_counter 5
+#define average_counter 1
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 extern struct k_sem my_sem; 
@@ -27,7 +27,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 		static bool delta_zigma_state = false; // 0 = delta, 1 = zigma, 2 = done
 		if(!delta_zigma_state){
 			// printk("counter: %d, rssi: %d, zigma: %d\n",counter,rssi,delta_zigma_state);
-			send_data_delta(rssi, counter);
+			send_data_delta( rssi, counter);
 			counter +=1;
 			if(counter >= average_counter){
 				counter = 0;

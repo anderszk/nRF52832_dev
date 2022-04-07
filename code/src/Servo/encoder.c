@@ -7,8 +7,8 @@ void test_me_3(){
     LOG_INF("dsadsahehhehehe");
 }
 
-int get_encoder(){
-    static int value = -1;
+int16_t get_encoder(){
+    static int16_t value = -1;
     value+=1;
     return value;
 }

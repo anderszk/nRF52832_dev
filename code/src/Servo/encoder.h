@@ -4,4 +4,4 @@
 
 
 void test_me_3();
-int get_encoder();
+int16_t get_encoder();

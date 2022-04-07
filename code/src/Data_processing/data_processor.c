@@ -1,40 +1,42 @@
 #include "data_processor.h"
 
 #define LOG_MODULE_NAME DATA_PROCESSOR
-#define average_counter 5
+#define average_counter 1
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 
-int8_t data_delta[average_counter];
-int8_t data_zigma[average_counter];
+int16_t data_delta[average_counter];
+int16_t data_zigma[average_counter];
 
-void send_data_delta(int8_t rssi, int index){
+void send_data_delta(int16_t rssi, int index){
     data_delta[index] = rssi;
 }
-void send_data_zigma(int8_t rssi, int index){
+void send_data_zigma(int16_t rssi, int index){
     data_zigma[index] = rssi;
 }
 
-int16_t *get_data(){
+void get_data(int16_t *buffer_data){
 
-    static int16_t buffer_data[3];
-    buffer_data[0] = (int16_t) get_encoder();
-    buffer_data[1] = (int16_t) get_average(data_delta);
-    buffer_data[2] = (int16_t) get_average(data_zigma);
-
-    return buffer_data;
+    buffer_data[0] =  get_encoder();
+    buffer_data[1] =  get_average(data_delta);
+    buffer_data[2] =  get_average(data_zigma);
+    // for(int i = 0; i<3; i++){
+    //     printk("value processor %d : %d\n", i, buffer_data[i]);
+    // }
 
 }
 
-int8_t get_average(int8_t *list){
+int16_t get_average(int16_t *list){
     int16_t average = 0;
-    int8_t size = average_counter;
+    int16_t size = average_counter;
     for(int i = 0; i < size; i++){
         average += list[i];
     }
     average = average/size;
-    return (int8_t) average;
+    return (int16_t) average;
 }
+
+
 
 
 
