@@ -27,7 +27,7 @@ extern struct k_sem my_sem;
 //     array = k_malloc(3*sizeof(int16_t));
 //     return array;
 // }
-int16_t readings[][3];
+matrix_3x3 readings[];
 
 void sweep_search(bool state, int16_t min_encoder_search, int16_t max_encoder_search, int increment){
     printk("Starting to search in Azimuth\n");    
@@ -46,30 +46,36 @@ void sweep_search(bool state, int16_t min_encoder_search, int16_t max_encoder_se
         k_sem_take(&my_sem, K_FOREVER);
         printk("next\n");
         get_data(&buffer_data);
-        for (int i = 0; i < 3; i++){
-            readings[index][i] = buffer_data[i];
-            // printk("value %d : %d.\n", i, buffer_data[i]);
-        }
-        printk("Encoder: %d, Delta: %d, Zigma %d, i: %d: \n",readings[index][0], readings[index][1], readings[index][2], index);
+        readings[index].x = buffer_data[0];
+        readings[index].y = buffer_data[1];
+        readings[index].z = buffer_data[2];
+        printk("Encoder: %d, Delta: %d, Zigma %d, i: %d: \n",readings[index].x, readings[index].y, readings[index].z, index);
         index+=1;
       
     }
-    // for (int i = 0; i<rows; i++){
-	// 	printk("Encoder: %d, delta: %d, zigma: %d\n", readings[i][0], readings[i][1], readings[i][2]);
-    // }
+    for (int i = 0; i<rows; i++){
+		printk("Encoder: %d, delta: %d, zigma: %d\n", readings[i].x, readings[i].y, readings[i].z);
+    }
 
     k_sem_give(&my_sem);
     printk("Azimuth search done\n");
 }
 
 
-int getReadings(int16_t **main_readings, int n){
+int getReadings(matrix_3x3 *main_readings, int n){
     for(int i = 0; i < n; i++){
         // for (int j = 0; j < 3; j++){
-            main_readings[i][0] = readings[i][0];
-            main_readings[i][0] = readings[i][1];
-            main_readings[i][0] = readings[i][2];
+            main_readings[i].x = readings[i].x;
+            main_readings[i].y = readings[i].y;
+            main_readings[i].z = readings[i].z;
         // }
     }
+    // for(int i = 0; i < n; i++){
+	// 	printk("Encoder: %d, delta: %d, zigma: %d \n", main_readings[i][0], main_readings[i][1], main_readings[i][2]);
+	// }
+    // for(int i = 0; i < n; i++){
+	// 	printk("Encoder: %d, delta: %d, zigma: %d \n", readings[i][0], readings[i][1], readings[i][2]);
+	// }
     return 0;
 }
+

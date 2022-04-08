@@ -51,7 +51,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 
 	}
 
-	else{printk("rssi: %d\n", rssi);}
+	// else{printk("rssi: %d\n", rssi);}
 
 	
 
