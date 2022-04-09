@@ -15,11 +15,11 @@ void send_data_zigma(int16_t rssi, int index){
     data_zigma[index] = rssi;
 }
 
-void get_data(int16_t *buffer_data){
+void get_data(matrix_3x3 *buffer_data){
 
-    buffer_data[0] =  get_encoder();
-    buffer_data[1] =  get_average(data_delta);
-    buffer_data[2] =  get_average(data_zigma);
+    buffer_data->encoder =  get_encoder();
+    buffer_data->delta =  get_average(data_delta);
+    buffer_data->zigma =  get_average(data_zigma);
     // for(int i = 0; i<3; i++){
     //     printk("value processor %d : %d\n", i, buffer_data[i]);
     // }
@@ -37,7 +37,70 @@ int16_t get_average(int16_t *list){
 }
 
 
+void value_validater(matrix_3x3 *raw_data, int n){
 
+    int16_t max_value = -10;
+    int16_t min_value = -90;
+
+    for(int i = 0; i < n; i++){
+        if(raw_data[i].delta > max_value || raw_data[i].delta  < min_value){
+            raw_data[i].encoder = 0;
+            raw_data[i].delta = 0;
+            raw_data[i].zigma = 0;
+        }
+        else if(raw_data[i].zigma > max_value || raw_data[i].zigma  < min_value){
+            raw_data[i].encoder = 0;
+            raw_data[i].delta = 0;
+            raw_data[i].zigma = 0;
+        }
+    }
+}
+
+void update_matrix(matrix_3x3 *data, int16_t *n){
+    printk("size:%d", *n);
+    for(int i = 0; i < *n; i++){
+        if(data[i].delta == 0 || data[i].zigma == 0){
+            for(int pos = i; pos < *n-1; pos++){
+                data[pos].encoder = data[pos+1].encoder;
+                data[pos].delta = data[pos+1].delta;
+                data[pos].zigma = data[pos+1].zigma;
+            }
+            *n -= 1;
+        }   
+    }
+}
+
+bool zero_point_validater(int16_t value_zigma){
+    int16_t treshold_zigma = -30;
+    if(value_zigma > treshold_zigma){
+        return true;
+    }
+    else return false;
+}
+
+int find_zero_point(matrix_3x3 validated_values[], int n){
+    int zero_point_index;
+
+    if(n == 1){
+        return 0;
+    }
+    if(validated_values[0].delta <= validated_values[1].delta && zero_point_validater(validated_values[0].zigma)){
+        zero_point_index = 0;
+    }
+    if(validated_values[n-1].delta <= validated_values[n-2].zigma && zero_point_validater(validated_values[n-1].zigma)){
+        zero_point_index = n-1;
+    }
+
+    for(int i = 1; i < n-1; i++){
+        if(validated_values[i].delta <= validated_values[i-1].delta && validated_values[i].delta <= validated_values[i+1].delta){
+            if(validated_values[i].delta < validated_values[zero_point_index].delta && zero_point_validater(validated_values[i].zigma)){
+                zero_point_index = i;
+            }
+        }
+    }
+    return zero_point_index;
+
+}
 
 
 

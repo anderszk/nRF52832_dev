@@ -106,5 +106,6 @@ int init_bluethooth_scan(){
 		LOG_ERR("Starting scanning failed (err %d)\n", err);
 		return err;
 	}
+	k_sem_give(&my_sem);
 	return err;
 }
