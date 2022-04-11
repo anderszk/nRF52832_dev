@@ -2,6 +2,8 @@
 
 #define LOG_MODULE_NAME DATA_PROCESSOR
 #define average_counter 1
+#define ZIGMA_ZERO_VALUE -90
+
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 
@@ -20,9 +22,6 @@ void get_data(matrix_3x3 *buffer_data){
     buffer_data->encoder =  get_encoder();
     buffer_data->delta =  get_average(data_delta);
     buffer_data->zigma =  get_average(data_zigma);
-    // for(int i = 0; i<3; i++){
-    //     printk("value processor %d : %d\n", i, buffer_data[i]);
-    // }
 
 }
 
@@ -57,7 +56,6 @@ void value_validater(matrix_3x3 *raw_data, int n){
 }
 
 void update_matrix(matrix_3x3 *data, int16_t *n){
-    printk("size:%d", *n);
     for(int i = 0; i < *n; i++){
         if(data[i].delta == 0 || data[i].zigma == 0){
             for(int pos = i; pos < *n-1; pos++){
@@ -71,15 +69,16 @@ void update_matrix(matrix_3x3 *data, int16_t *n){
 }
 
 bool zero_point_validater(int16_t value_zigma){
-    int16_t treshold_zigma = -30;
+    int16_t treshold_zigma = ZIGMA_ZERO_VALUE;
     if(value_zigma > treshold_zigma){
         return true;
     }
-    else return false;
+    else{ return false;}
 }
 
 int find_zero_point(matrix_3x3 validated_values[], int n){
-    int zero_point_index;
+    printk("size: %d\n", n);
+    int zero_point_index = 0;
 
     if(n == 1){
         return 0;
@@ -93,16 +92,37 @@ int find_zero_point(matrix_3x3 validated_values[], int n){
 
     for(int i = 1; i < n-1; i++){
         if(validated_values[i].delta <= validated_values[i-1].delta && validated_values[i].delta <= validated_values[i+1].delta){
-            if(validated_values[i].delta < validated_values[zero_point_index].delta && zero_point_validater(validated_values[i].zigma)){
+            if(validated_values[i].delta <= validated_values[zero_point_index].delta && zero_point_validater(validated_values[i].zigma)){
+                printk("Old index: %d, value %d\n", zero_point_index, validated_values[zero_point_index].delta);
                 zero_point_index = i;
+                printk("New index: %d, value %d\n", zero_point_index, validated_values[zero_point_index].delta);
             }
         }
     }
+    printk("index: %d, delta %d, zigma: %d", zero_point_index, validated_values[zero_point_index].delta, validated_values[zero_point_index].zigma);
     return zero_point_index;
 
 }
 
+void fine_sweeper(int threshold_degrees, int threshold_search, int sweep_sector, matrix_3x3 zero_point){
+    matrix_3x3 temp_data[sweep_sector];
+    int16_t min_encoder_value = zero_point.encoder - (sweep_sector/2);
+    int16_t max_encoder_value = zero_point.encoder + (sweep_sector/2);
+    int size = sweep_sector + 1;
+}
 
+void set_fake_values(matrix_3x3 *matrix){
+	matrix[22].delta = -77;
+	matrix[9].zigma = 33;
+    matrix[0].delta = -99;
+    matrix[11].delta = -89;
+    matrix[11].zigma = -60;
+    matrix[2].zigma = 21331;
+    matrix[17].delta = -70;
+
+	// azimuth_reading[269].delta = 0;
+	    
+}
 
 
 // int find_local_minima(int data_array[][3]){

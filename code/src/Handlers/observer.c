@@ -1,10 +1,14 @@
 #include "observer.h"
 #define LOG_MODULE_NAME Observer
 #define average_counter 1
+#define switch_pin 25
+
+
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 extern struct k_sem my_sem; 
 bool send_data_state = false;
+const struct device *dev;
 
 int set_observer(bool state){
 	int err = 1;
@@ -32,7 +36,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 			if(counter >= average_counter){
 				counter = 0;
 				delta_zigma_state = true;
-				
+				gpio_pin_set(dev, switch_pin, 0);
 			}
 		}
 		else if(delta_zigma_state){
@@ -42,6 +46,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 			if(counter >= average_counter){
 				delta_zigma_state = false;
 				counter = 0;
+				gpio_pin_set(dev, switch_pin, 1);
 				set_observer(false);
 				k_sem_give(&my_sem);
 				printk("given\n");
@@ -86,6 +91,11 @@ int init_bluethooth_scan(){
 		.interval   = BT_GAP_SCAN_FAST_INTERVAL,
 		.window     = BT_GAP_SCAN_FAST_WINDOW,
 	};
+
+	dev = device_get_binding("GPIO_0");
+	if (dev == NULL) {
+		return;
+	}
 	int err;
 	printk("Starting Observer\n");
 	/* Initialize the Bluetooth Subsystem */
@@ -106,6 +116,11 @@ int init_bluethooth_scan(){
 		LOG_ERR("Starting scanning failed (err %d)\n", err);
 		return err;
 	}
+	err = gpio_pin_configure(dev, switch_pin, GPIO_OUTPUT_ACTIVE | GPIO_ACTIVE_LOW);
+	if (err < 0) {
+		return;
+	}
+	gpio_pin_set(dev, switch_pin, 1);
 	k_sem_give(&my_sem);
 	return err;
 }

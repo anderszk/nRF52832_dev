@@ -1,6 +1,6 @@
 #include <zephyr.h>
 #include <logging/log.h>
-
+#include <drivers/gpio.h>
 /**
  * @brief Init timer
  * 

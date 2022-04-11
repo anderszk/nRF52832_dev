@@ -47,13 +47,7 @@ int timer_start()
     return 0;
 }
 
-uint32_t convert_to_raw(uint32_t value)
-{
-    uint32_t angle = 0;
-    angle = (value * 32000)/270 + 8000;
 
-    return angle;
-}
 
 int servo_init(uint32_t N, int servo_pin)
 {
@@ -82,7 +76,13 @@ int servo_init(uint32_t N, int servo_pin)
     return err=0;
 }
 
+uint32_t convert_to_raw(uint32_t value)
+{
+    uint32_t angle = 0;
+    angle = (value * 32000)/270 + 8000;
 
+    return angle;
+}
 
 
 void raw_move_servo(int N, uint32_t position)
