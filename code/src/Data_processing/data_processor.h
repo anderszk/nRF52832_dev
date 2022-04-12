@@ -24,4 +24,3 @@ int find_zero_point(matrix_3x3 validated_values[], int n);
 bool zero_point_validater(int16_t value_zigma);
 void update_matrix(matrix_3x3 *data, int16_t *n);
 void set_fake_values(matrix_3x3 *matrix);//brukes for fake verdier.
-void fine_sweeper(int threshold_degrees, int threshold_search, int sweep_sector, matrix_3x3 zero_point); 

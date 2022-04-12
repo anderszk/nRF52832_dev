@@ -23,7 +23,9 @@ matrix_3x3 azimuth_reading[WORKING_AREA];
 int zero_point_index_azimuth;
 int16_t min_encoder_search = 0;
 int16_t max_encoder_search = 270;
-int increment = 3;
+int increment = 1;
+
+
 
 void main(void)
 {
@@ -35,7 +37,7 @@ void main(void)
 	int16_t size = (max_encoder_search-min_encoder_search)/increment;
 	k_sem_take(&my_sem, K_FOREVER);
 	sweep_search(0, min_encoder_search, max_encoder_search,increment);
-	getReadings(&azimuth_reading, size);
+	get_readings(&azimuth_reading, size);
 	// set_fake_values(&azimuth_reading);
 
 	value_validater(&azimuth_reading, size);

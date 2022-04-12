@@ -20,6 +20,7 @@ int16_t get_encoder(){
 void init_encoder(){
     //Masse encoder inits
 	servo_init(servo_azimuth_N, servo_azimuth_pin);
+    
 
 
 

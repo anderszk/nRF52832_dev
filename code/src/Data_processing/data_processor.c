@@ -104,12 +104,7 @@ int find_zero_point(matrix_3x3 validated_values[], int n){
 
 }
 
-void fine_sweeper(int threshold_degrees, int threshold_search, int sweep_sector, matrix_3x3 zero_point){
-    matrix_3x3 temp_data[sweep_sector];
-    int16_t min_encoder_value = zero_point.encoder - (sweep_sector/2);
-    int16_t max_encoder_value = zero_point.encoder + (sweep_sector/2);
-    int size = sweep_sector + 1;
-}
+
 
 void set_fake_values(matrix_3x3 *matrix){
 	matrix[22].delta = -77;
