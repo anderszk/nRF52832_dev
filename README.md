@@ -60,7 +60,7 @@ Follow the instructions on the wiring diagrams and documentation to assemble the
 NOTE: We used Digi-Key Electronics as distributor for all our parts in the parts list, so you may find variations in price and product names if you choose to use another distributor.
 
 ## Parts
-| Part                   | Product details     | Produser                             | Quantity | Unit price (NOK) | Extended price (NOK) |
+| Part                   | Product details     | Producer                             | Quantity | Unit price (NOK) | Extended price (NOK) |
 | :--------------------- | :------------------ | :----------------------------------- | :------- |:---------------- | :------------------- |
 | Antenna patch          | ANT-2.4-CPA         | Linx Technoologies Inc.              | 2        | 34,12            | 68,24                |
 | Breadboard             | 920-0031-01         | Smartboard Inc.                      | 1        | 71,39            | 71,39                |
