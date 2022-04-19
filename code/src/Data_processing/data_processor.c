@@ -1,8 +1,8 @@
 #include "data_processor.h"
 
 #define LOG_MODULE_NAME DATA_PROCESSOR
-#define average_counter 1
-#define ZIGMA_ZERO_VALUE -90
+#define average_counter 5
+#define ZIGMA_ZERO_VALUE -50
 
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
@@ -36,12 +36,13 @@ int16_t get_average(int16_t *list){
 }
 
 
-void value_validater(matrix_3x3 *raw_data, int n){
+void value_validater(matrix_3x3 *raw_data, int16_t *n){
 
     int16_t max_value = -10;
     int16_t min_value = -90;
+    printk("%d \n", *n);
 
-    for(int i = 0; i < n; i++){
+    for(int i = 0; i < *n; i++){
         if(raw_data[i].delta > max_value || raw_data[i].delta  < min_value){
             raw_data[i].encoder = 0;
             raw_data[i].delta = 0;
@@ -56,6 +57,7 @@ void value_validater(matrix_3x3 *raw_data, int n){
 }
 
 void update_matrix(matrix_3x3 *data, int16_t *n){
+    printk("%d\n", *n);
     for(int i = 0; i < *n; i++){
         if(data[i].delta == 0 || data[i].zigma == 0){
             for(int pos = i; pos < *n-1; pos++){

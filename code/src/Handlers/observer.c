@@ -1,6 +1,6 @@
 #include "observer.h"
 #define LOG_MODULE_NAME Observer
-#define average_counter 1
+#define average_counter 5
 #define switch_pin 25
 
 
