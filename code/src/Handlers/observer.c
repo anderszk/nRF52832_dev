@@ -13,7 +13,6 @@ const struct device *dev;
 int set_observer(bool state){
 	int err = 1;
 	send_data_state = state;
-	printk("Observer state changed to %d\n", send_data_state);
 	return err = 0;
 
 }
@@ -28,7 +27,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 	if(send_data_state){
     	
 		static int counter = 0;
-		static bool delta_zigma_state = false; // 0 = delta, 1 = zigma, 2 = done
+		static bool delta_zigma_state = false; // 0 = delta, 1 = zigma
 		if(!delta_zigma_state){
 			rssi = KALMAN(rssi);
 			// printk("counter: %d, rssi: %d, zigma: %d\n",counter,rssi,delta_zigma_state);
@@ -51,7 +50,6 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 				gpio_pin_set(dev, switch_pin, 0);
 				set_observer(false);
 				k_sem_give(&my_sem);
-				printk("given\n");
 				
 			}
 		}

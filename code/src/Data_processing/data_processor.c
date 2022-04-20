@@ -1,14 +1,14 @@
 #include "data_processor.h"
 
 #define LOG_MODULE_NAME DATA_PROCESSOR
-#define ZIGMA_ZERO_VALUE -45
+#define ZIGMA_ZERO_VALUE -44
 
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
-int16_t average_counter = 5;
+int16_t average_counter = 1;
 
-int16_t data_delta[5];
-int16_t data_zigma[5];
+int16_t data_delta[10];
+int16_t data_zigma[10];
 
 void send_data_delta(int16_t rssi, int index){
     data_delta[index] = rssi;
@@ -40,26 +40,23 @@ void value_validater(matrix_3x3 *raw_data, int16_t *n){
 
     int16_t max_value = -10;
     int16_t min_value = -90;
-    printk("%d \n", *n);
+    printk("n: %d \n", *n);
 
     for(int i = 0; i < *n; i++){
-        if(raw_data[i].delta > max_value || raw_data[i].delta  < min_value){
+        if(raw_data[i].delta > max_value || raw_data[i].delta  < min_value || raw_data[i].zigma > max_value || raw_data[i].zigma  < min_value){
             raw_data[i].encoder = 0;
             raw_data[i].delta = 0;
             raw_data[i].zigma = 0;
-        }
-        else if(raw_data[i].zigma > max_value || raw_data[i].zigma  < min_value){
-            raw_data[i].encoder = 0;
-            raw_data[i].delta = 0;
-            raw_data[i].zigma = 0;
+            printk("Changed values at: %d", raw_data[i].encoder);
         }
     }
 }
 
 void update_matrix(matrix_3x3 *data, int16_t *n){
-    printk("%d\n", *n);
+    printk("n: %d\n", *n);
     for(int i = 0; i < *n; i++){
         if(data[i].delta == 0 || data[i].zigma == 0){
+            printk("Changed values at: %d", data[i].encoder);
             for(int pos = i; pos < *n-1; pos++){
                 data[pos].encoder = data[pos+1].encoder;
                 data[pos].delta = data[pos+1].delta;
@@ -72,7 +69,7 @@ void update_matrix(matrix_3x3 *data, int16_t *n){
 
 bool zero_point_validater(int16_t value_zigma){
     int16_t treshold_zigma = ZIGMA_ZERO_VALUE;
-    if(value_zigma > treshold_zigma){
+    if(value_zigma >= treshold_zigma){
         return true;
     }
     else{ return false;}
@@ -95,13 +92,13 @@ int find_zero_point(matrix_3x3 validated_values[], int n){
     for(int i = 1; i < n-1; i++){
         // if(validated_values[i].delta <= validated_values[i-1].delta && validated_values[i].delta <= validated_values[i+1].delta){
             if(validated_values[i].delta <= validated_values[zero_point_index].delta && zero_point_validater(validated_values[i].zigma)){
-                printk("Old index: %d, value %d\n", zero_point_index, validated_values[zero_point_index].delta);
+                printk("Old index: %d, value %d\n", validated_values[zero_point_index].encoder, validated_values[zero_point_index].delta);
                 zero_point_index = i;
-                printk("New index: %d, value %d\n", zero_point_index, validated_values[zero_point_index].delta);
+                printk("New index: %d, value %d\n", validated_values[zero_point_index].encoder, validated_values[zero_point_index].delta);
             // }
         }
     }
-    printk("index: %d, delta %d, zigma: %d", zero_point_index, validated_values[zero_point_index].delta, validated_values[zero_point_index].zigma);
+    printk("encoder: %d, delta %d, zigma: %d\n", validated_values[zero_point_index].encoder, validated_values[zero_point_index].delta, validated_values[zero_point_index].zigma);
     return zero_point_index;
 
 }

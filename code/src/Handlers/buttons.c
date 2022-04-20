@@ -44,6 +44,7 @@ void button_handler(uint32_t button_state, uint32_t has_changed){
 				break;
 			case DK_BTN3_MSK:
 				button_pressed = 3;
+                get_servo_angle();
 				break;
 			case DK_BTN4_MSK:
 				button_pressed = 4;
@@ -51,7 +52,7 @@ void button_handler(uint32_t button_state, uint32_t has_changed){
 			default:
 				break;
 		}
-		printk("Button %d pressed", button_pressed);
+		printk("Button %d pressed\n", button_pressed);
 		
 
 	}

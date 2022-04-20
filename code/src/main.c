@@ -22,7 +22,7 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 matrix_3x3 azimuth_reading[WORKING_AREA];
 int zero_point_index_azimuth;
-int16_t min_encoder_search = 90;
+int16_t min_encoder_search = 0;
 int16_t max_encoder_search = 180;
 int increment = 1;
 
@@ -46,14 +46,14 @@ void main(void)
 		printk("Encoder: %d,  delta: %d, zigma: %d \n", azimuth_reading[i].encoder, azimuth_reading[i].delta, azimuth_reading[i].zigma);
 	}
 	zero_point_index_azimuth = find_zero_point(azimuth_reading, size);
-	angle_move_servo(0, zero_point_index_azimuth+88);
+	angle_move_servo(0, zero_point_index_azimuth);
 
-	// fine_sweeper(0,3,5,20,azimuth_reading[zero_point_index_azimuth]);
+	fine_sweeper(0,10,10,19,azimuth_reading[zero_point_index_azimuth]);
 
 	printk("Azimuth search done\n");
 	printk("Main:\n");
 
-	printk("zero: %d", azimuth_reading[zero_point_index_azimuth].delta);
+	
 
 	// if(err){
 	// 	LOG_ERR("err:%d", err);
