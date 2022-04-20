@@ -102,6 +102,7 @@ void raw_move_servo(int N, uint32_t position)
 
 void angle_move_servo(int N, uint32_t angle)
 {
+    angle += 45;
     azimuth_servo_angle = angle;
     if (angle >= 270)
     {
@@ -123,22 +124,30 @@ void angle_move_servo(int N, uint32_t angle)
 void increment_servo(int N){
     if(N == 0){
         azimuth_servo_angle += 1;
-        angle_move_servo(N,azimuth_servo_angle);
+        uint32_t raw_angle = convert_to_raw(azimuth_servo_angle);
+        raw_move_servo(N,raw_angle);
     }
     else if(N == 1){
         horizontal_servo_angle +=1;
-        angle_move_servo(N, horizontal_servo_angle);
+        uint32_t raw_angle = convert_to_raw(horizontal_servo_angle);
+        raw_move_servo(N, raw_angle);
     }
 }
 
 void decrement_servo(int N){
     if(N == 0){
         azimuth_servo_angle -= 1;
-        angle_move_servo(N,azimuth_servo_angle);
+        uint32_t raw_angle = convert_to_raw(azimuth_servo_angle);
+        raw_move_servo(N,raw_angle);
     }
     else if(N == 1){
         horizontal_servo_angle -= 1;
-        angle_move_servo(N, horizontal_servo_angle);
+        uint32_t raw_angle = convert_to_raw(horizontal_servo_angle);
+        raw_move_servo(N, raw_angle);
     }
+}
+
+void get_servo_angle(){
+    printk("servo angle: %d\n", azimuth_servo_angle);
 }
 

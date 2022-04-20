@@ -63,3 +63,4 @@ uint32_t sin_scaled(uint32_t input, uint32_t input_max, uint32_t output_min, uin
 
 void increment_servo(int N);
 void decrement_servo(int N);
+void get_servo_angle();
