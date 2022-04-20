@@ -3,8 +3,6 @@
 
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
-//Configure pins
-
 //Set servo period in Hz
 #define SERVO_PERIOD 50
 
@@ -13,7 +11,6 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 #define TIMER_RELOAD 320000
 // #define TIMER_RELOAD (CLOCK_SPEED/SERVO_PERIOD)
 
-//Peripheral channel assignment
 #define PWMN_GPIOTE_CH      {0, 1, 2, 3}
 #define PWMN_PPI_CH_A       {0, 2, 3, 4}
 #define PWMN_PPI_CH_B       {1, 1, 5, 5}
@@ -43,7 +40,7 @@ int timer_init()
 int timer_start()
 {
     NRF_TIMER3->TASKS_START = 1;
-    
+
     LOG_INF("Timer started.");
     return 0;
 }
@@ -53,7 +50,6 @@ uint32_t horizontal_servo_angle;
 
 int servo_init(uint32_t N, int servo_pin)
 {
-    int err;
     if(N>3) {
         // Invalid N.
         return 1;
@@ -73,9 +69,9 @@ int servo_init(uint32_t N, int servo_pin)
         NRF_PPI->FORK[pwmN_ppi_ch_b[N-1]].TEP = (uint32_t)&NRF_GPIOTE->TASKS_SET[pwmN_gpiote_ch[N]];
     }
     NRF_PPI->CHENSET                      = (1 << pwmN_ppi_ch_a[N]) | (1 << pwmN_ppi_ch_b[N]);
-
+    
     LOG_INF("Initializing servo %u on pin %i success!\n", N, servo_pin);
-    return err=0;
+    return 0;
 }
 
 uint32_t convert_to_raw(uint32_t value)
