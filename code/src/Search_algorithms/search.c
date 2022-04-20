@@ -68,13 +68,11 @@ void fine_sweeper(bool state, int threshold_degrees, int threshold_search, int s
     int16_t zero_point_index;
     int16_t min_encoder_value = zero_point.encoder - (sweep_sector/2);
     int16_t max_encoder_value = zero_point.encoder + (sweep_sector/2);
-    int size = sweep_sector + 1;
+    int16_t size = sweep_sector + 1;
     sweep_search(state, min_encoder_value, max_encoder_value, increment);
-    get_readings(&temp_data, size);
-    value_validater(&temp_data, size);
-    update_matrix(&temp_data, &size);
+    get_readings(&temp_data, &size);
     zero_point_index = find_zero_point(temp_data, size); 
-    
+    // for (int i  = 0; i < )
 
 
 
@@ -93,7 +91,7 @@ int get_readings(matrix_3x3 *main_readings, int16_t *n){
     }
     printk("%d\n", *n);
 
-    
+    reset_readings();
     return 0;
 }
 

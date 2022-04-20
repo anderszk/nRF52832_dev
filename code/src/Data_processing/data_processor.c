@@ -1,14 +1,14 @@
 #include "data_processor.h"
 
 #define LOG_MODULE_NAME DATA_PROCESSOR
-#define average_counter 5
-#define ZIGMA_ZERO_VALUE -50
+#define ZIGMA_ZERO_VALUE -45
 
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
+int16_t average_counter = 5;
 
-int16_t data_delta[average_counter];
-int16_t data_zigma[average_counter];
+int16_t data_delta[5];
+int16_t data_zigma[5];
 
 void send_data_delta(int16_t rssi, int index){
     data_delta[index] = rssi;
@@ -32,7 +32,7 @@ int16_t get_average(int16_t *list){
         average += list[i];
     }
     average = average/size;
-    return (int16_t) average;
+    return  average;
 }
 
 
@@ -93,12 +93,12 @@ int find_zero_point(matrix_3x3 validated_values[], int n){
     }
 
     for(int i = 1; i < n-1; i++){
-        if(validated_values[i].delta <= validated_values[i-1].delta && validated_values[i].delta <= validated_values[i+1].delta){
+        // if(validated_values[i].delta <= validated_values[i-1].delta && validated_values[i].delta <= validated_values[i+1].delta){
             if(validated_values[i].delta <= validated_values[zero_point_index].delta && zero_point_validater(validated_values[i].zigma)){
                 printk("Old index: %d, value %d\n", zero_point_index, validated_values[zero_point_index].delta);
                 zero_point_index = i;
                 printk("New index: %d, value %d\n", zero_point_index, validated_values[zero_point_index].delta);
-            }
+            // }
         }
     }
     printk("index: %d, delta %d, zigma: %d", zero_point_index, validated_values[zero_point_index].delta, validated_values[zero_point_index].zigma);
@@ -119,6 +119,10 @@ void set_fake_values(matrix_3x3 *matrix){
 
 	// azimuth_reading[269].delta = 0;
 	    
+}
+
+void set_average_counter(int16_t value){
+    average_counter = value;
 }
 
 

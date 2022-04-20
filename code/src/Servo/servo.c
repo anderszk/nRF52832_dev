@@ -24,6 +24,7 @@ static uint32_t pwmN_ppi_ch_a[]     = PWMN_PPI_CH_A;
 static uint32_t pwmN_ppi_ch_b[]     = PWMN_PPI_CH_B;
 static uint32_t pwmN_timer_cc_num[] = PWMN_TIMER_CC_NUM;
 
+
 // Timer CC register use to reset the timer.
 #define TIMER_RELOAD_CC_NUM 5
 
@@ -47,7 +48,8 @@ int timer_start()
     return 0;
 }
 
-
+uint32_t azimuth_servo_angle;
+uint32_t horizontal_servo_angle;
 
 int servo_init(uint32_t N, int servo_pin)
 {
@@ -104,6 +106,7 @@ void raw_move_servo(int N, uint32_t position)
 
 void angle_move_servo(int N, uint32_t angle)
 {
+    azimuth_servo_angle = angle;
     if (angle >= 270)
     {
         angle = 270;
@@ -111,8 +114,35 @@ void angle_move_servo(int N, uint32_t angle)
     {
         angle = 0;
     }
-    
+    if(N == 0){
+        azimuth_servo_angle = angle;
+    }
+    else if(N == 1){
+        horizontal_servo_angle = angle;
+    }
     angle = convert_to_raw(angle);
     raw_move_servo(N, angle);
+}
+
+void increment_servo(int N){
+    if(N == 0){
+        azimuth_servo_angle += 1;
+        angle_move_servo(N,azimuth_servo_angle);
+    }
+    else if(N == 1){
+        horizontal_servo_angle +=1;
+        angle_move_servo(N, horizontal_servo_angle);
+    }
+}
+
+void decrement_servo(int N){
+    if(N == 0){
+        azimuth_servo_angle -= 1;
+        angle_move_servo(N,azimuth_servo_angle);
+    }
+    else if(N == 1){
+        horizontal_servo_angle -= 1;
+        angle_move_servo(N, horizontal_servo_angle);
+    }
 }
 

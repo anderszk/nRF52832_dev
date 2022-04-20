@@ -1,8 +1,8 @@
 #include "observer.h"
 #define LOG_MODULE_NAME Observer
-#define average_counter 5
-#define switch_pin 25
+#define switch_pin 14
 
+extern int16_t average_counter;
 
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
@@ -26,27 +26,29 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 			 struct net_buf_simple *ad)
 {	
 	if(send_data_state){
-    	// rssi = KALMAN(rssi);
+    	
 		static int counter = 0;
 		static bool delta_zigma_state = false; // 0 = delta, 1 = zigma, 2 = done
 		if(!delta_zigma_state){
+			rssi = KALMAN(rssi);
 			// printk("counter: %d, rssi: %d, zigma: %d\n",counter,rssi,delta_zigma_state);
 			send_data_delta( rssi, counter);
 			counter +=1;
 			if(counter >= average_counter){
 				counter = 0;
 				delta_zigma_state = true;
-				gpio_pin_set(dev, switch_pin, 0);
+				gpio_pin_set(dev, switch_pin, 1);
 			}
 		}
 		else if(delta_zigma_state){
+			rssi = KALMAN_ZIG(rssi);
 			// printk("counter: %d, rssi: %d, zigma: %d \n",counter,rssi, delta_zigma_state);
 			send_data_zigma(rssi, counter);
 			counter += 1;
 			if(counter >= average_counter){
 				delta_zigma_state = false;
 				counter = 0;
-				gpio_pin_set(dev, switch_pin, 1);
+				gpio_pin_set(dev, switch_pin, 0);
 				set_observer(false);
 				k_sem_give(&my_sem);
 				printk("given\n");
@@ -120,7 +122,7 @@ int init_bluethooth_scan(){
 	if (err < 0) {
 		return;
 	}
-	gpio_pin_set(dev, switch_pin, 1);
+	gpio_pin_set(dev, switch_pin, 0);
 	k_sem_give(&my_sem);
 	return err;
 }

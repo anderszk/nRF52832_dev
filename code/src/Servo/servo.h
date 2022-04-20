@@ -58,3 +58,6 @@ void raw_move_servo(int N, uint32_t position);
 //Sweep motion, speed.
 
 uint32_t sin_scaled(uint32_t input, uint32_t input_max, uint32_t output_min, uint32_t output_max);
+
+void increment_servo(int N);
+void decrement_servo(int N);

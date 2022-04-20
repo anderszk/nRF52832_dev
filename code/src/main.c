@@ -8,6 +8,7 @@
 
 // #include "initiater.h"
 #include "search.h"
+#include "buttons.h"
 
 
 #define LOG_MODULE_NAME app
@@ -27,12 +28,14 @@ int increment = 1;
 
 
 
+
 void main(void)
 {
 	LOG_INF("Hello World! %s\n", CONFIG_BOARD);
 	int err = timer_init();
 	err = timer_start();
 	err = init_bluethooth_scan();	
+	configure_dk_buttons_leds();
 	init_encoder();
 	int16_t size = (max_encoder_search-min_encoder_search)/increment;
 	k_sem_take(&my_sem, K_FOREVER);
@@ -43,7 +46,9 @@ void main(void)
 		printk("Encoder: %d,  delta: %d, zigma: %d \n", azimuth_reading[i].encoder, azimuth_reading[i].delta, azimuth_reading[i].zigma);
 	}
 	zero_point_index_azimuth = find_zero_point(azimuth_reading, size);
-	angle_move_servo(0, zero_point_index_azimuth+92);
+	angle_move_servo(0, zero_point_index_azimuth+88);
+
+	// fine_sweeper(0,3,5,20,azimuth_reading[zero_point_index_azimuth]);
 
 	printk("Azimuth search done\n");
 	printk("Main:\n");
