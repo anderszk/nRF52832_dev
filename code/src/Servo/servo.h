@@ -14,7 +14,9 @@ int timer_init();
 int timer_start();
 
 /**
-*@brief Funciton that initializes servo on specified pin.
+*@brief Funciton that initializes servo on specified pin. IMPORTANT, for servos to behave correctly,
+* all prior servos N have to be initialized, and in order. That is, if initializing servo N = 1, 
+* servo N = 0 has to also be initialized first.
 *
 * Takes in two parameters
 * @param N Servo numer, from 0 to 3
