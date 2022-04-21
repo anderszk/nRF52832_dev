@@ -22,8 +22,6 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 #define CONN_STATUS_LED DK_LED2
 #define RUN_LED_BLINK_INTERVAL 1000
 
-//GPIOS
-#define outPin 10
 
 //
 extern const struct device *dev;
@@ -44,7 +42,7 @@ void button_handler(uint32_t button_state, uint32_t has_changed){
 				break;
 			case DK_BTN3_MSK:
 				button_pressed = 3;
-                get_servo_angle();
+                get_servo_angle(0);
 				break;
 			case DK_BTN4_MSK:
 				button_pressed = 4;

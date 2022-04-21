@@ -7,8 +7,8 @@
 
 
 // #include "initiater.h"
-#include "search.h"
-#include "buttons.h"
+
+#include "initiater.h"
 
 
 #define LOG_MODULE_NAME app
@@ -22,8 +22,8 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 matrix_3x3 azimuth_reading[WORKING_AREA];
 int zero_point_index_azimuth;
-int16_t min_encoder_search = 0;
-int16_t max_encoder_search = 180;
+int16_t min_encoder_search_azimuth = 0;
+int16_t max_encoder_search_azimuth = 180;
 int increment = 1;
 
 
@@ -32,14 +32,10 @@ int increment = 1;
 void main(void)
 {
 	LOG_INF("Hello World! %s\n", CONFIG_BOARD);
-	int err = timer_init();
-	err = timer_start();
-	err = init_bluethooth_scan();	
-	configure_dk_buttons_leds();
-	init_encoder();
-	int16_t size = (max_encoder_search-min_encoder_search)/increment;
+	initiate_modules();
+	int16_t size = (max_encoder_search_azimuth-min_encoder_search_azimuth)/increment;
 	k_sem_take(&my_sem, K_FOREVER);
-	sweep_search(0, min_encoder_search, max_encoder_search,increment);
+	sweep_search(0, min_encoder_search_azimuth, max_encoder_search_azimuth,increment);
 	get_readings(&azimuth_reading, &size);
 
 	for(int i = 0; i < size; i++){

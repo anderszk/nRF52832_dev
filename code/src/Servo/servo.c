@@ -101,22 +101,21 @@ void raw_move_servo(int N, uint32_t position)
 }
 
 void angle_move_servo(int N, uint32_t angle)
-{
+{   
+    if(N == 0){
     angle += 45;
     azimuth_servo_angle = angle;
-    if (angle >= 270)
-    {
-        angle = 270;
-    } else if(angle <= 0)
-    {
-        angle = 0;
-    }
-    if(N == 0){
-        azimuth_servo_angle = angle;
     }
     else if(N == 1){
         horizontal_servo_angle = angle;
     }
+
+    if (angle >= 270){angle = 270;} 
+    else if(angle <= 0){angle = 0;}
+
+    if(N == 0){azimuth_servo_angle = angle;}
+    else if(N == 1){horizontal_servo_angle = angle;}
+
     angle = convert_to_raw(angle);
     raw_move_servo(N, angle);
 }
@@ -147,7 +146,8 @@ void decrement_servo(int N){
     }
 }
 
-void get_servo_angle(){
-    printk("servo angle: %d\n", azimuth_servo_angle);
+void get_servo_angle(int N){
+    if(N == 0){printk("Azimuth servomotor angle: %d\n", azimuth_servo_angle);}
+    else if(N == 1){printk("Horizontal servomotor angle: %d\n", horizontal_servo_angle);}
 }
 

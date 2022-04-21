@@ -1,7 +1,5 @@
 // #include "button_leds.h"
-#include "servo.h"
-#include "observer.h"
-
+#include "buttons.h"
 
 
 int initiate_modules();

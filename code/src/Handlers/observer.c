@@ -36,7 +36,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 			if(counter >= average_counter){
 				counter = 0;
 				delta_zigma_state = true;
-				gpio_pin_set(dev, switch_pin, 1);
+				gpio_pin_set(dev, switch_pin, 0);
 			}
 		}
 		else if(delta_zigma_state){
@@ -47,7 +47,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 			if(counter >= average_counter){
 				delta_zigma_state = false;
 				counter = 0;
-				gpio_pin_set(dev, switch_pin, 0);
+				gpio_pin_set(dev, switch_pin, 1);
 				set_observer(false);
 				k_sem_give(&my_sem);
 				
@@ -120,7 +120,7 @@ int init_bluethooth_scan(){
 	if (err < 0) {
 		return;
 	}
-	gpio_pin_set(dev, switch_pin, 0);
+	gpio_pin_set(dev, switch_pin, 1);
 	k_sem_give(&my_sem);
 	return err;
 }
