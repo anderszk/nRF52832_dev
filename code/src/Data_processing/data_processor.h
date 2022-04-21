@@ -17,11 +17,11 @@ void test_me_2();
 void send_data_delta(int16_t rssi, int index);
 void send_data_zigma(int16_t rssi, int index);
 int16_t get_average(int16_t list[]);
-void get_data(matrix_3x3 *buffer_data);
+void get_data(matrix_3x3 *buffer_data, int N);
 void freeData();
 void value_validater(matrix_3x3 *raw_data, int16_t *n);
 int find_zero_point(matrix_3x3 validated_values[], int n);
-bool zero_point_validater(int16_t value_zigma);
+bool zero_point_validater(int16_t value_zigma, int16_t value_delta);
 void update_matrix(matrix_3x3 *data, int16_t *n);
 void set_fake_values(matrix_3x3 *matrix);//brukes for fake verdier.
 void set_average_counter(int16_t value);

@@ -27,6 +27,7 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 extern const struct device *dev;
 
 void button_handler(uint32_t button_state, uint32_t has_changed){
+	static int N = 0;
 	
     int button_pressed = 0;
 	if (has_changed & button_state){
@@ -34,18 +35,22 @@ void button_handler(uint32_t button_state, uint32_t has_changed){
 			
 			case DK_BTN1_MSK:
 				button_pressed = 1;
-                increment_servo(0);
+                increment_servo(N);
 				break;
 			case DK_BTN2_MSK:
 			    button_pressed = 2;
-                decrement_servo(0);
+                decrement_servo(N);
 				break;
 			case DK_BTN3_MSK:
 				button_pressed = 3;
-                get_servo_angle(0);
+                get_servo_angle(N);
 				break;
 			case DK_BTN4_MSK:
 				button_pressed = 4;
+				if(N == 0){
+					N = 1;
+				}
+				else {N = 0;}
 				break;
 			default:
 				break;

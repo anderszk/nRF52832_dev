@@ -5,27 +5,42 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 #define servo_azimuth_N 0
 #define servo_azimuth_pin 13
+#define servo_horizontal_N 1
+#define servo_horizontal_pin 15
+#define servo_antenna_N 2
+#define servo_antenna_pin 16
 
 int16_t azimuth_encoder_value = 0;
+int16_t horizontal_encoder_value = 0;
 
 
-void test_me_3(){
-    LOG_INF("dsadsahehhehehe");
-}
 
-int16_t get_encoder(){//fake encoder verdier som gjenspeiler servo vinkelen så bra den kan
-    
-    azimuth_encoder_value += 1;
-    return azimuth_encoder_value;
+int16_t get_encoder(int N){//fake encoder verdier som gjenspeiler servo vinkelen så bra den kan
+    if(N < 1){
+        azimuth_encoder_value += 1;
+        return azimuth_encoder_value;
+    }
+    else{
+        horizontal_encoder_value += 1;
+        return horizontal_encoder_value;
+    }
 }
 
 int init_encoder(){
     //Masse encoder inits
 	int err = servo_init(servo_azimuth_N, servo_azimuth_pin);
+    err = servo_init(servo_horizontal_N,servo_horizontal_pin);
+    err = servo_init(servo_antenna_N, servo_antenna_pin);
+    angle_move_servo(servo_azimuth_N, 0);
+    angle_move_servo(servo_horizontal_N, 25);
+    angle_move_servo(servo_antenna_N, 0);
+
     
     return err;
 }
 
-void set_encoder(int value){
-    azimuth_encoder_value = value;
+void set_encoder(int value, int N){
+    if(N < 1){
+        azimuth_encoder_value = value;}
+    else{horizontal_encoder_value = value;}
 }
