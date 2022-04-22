@@ -7,6 +7,12 @@ typedef struct data_s
 	int16_t zigma;
 } matrix_3x3;
 
+typedef struct data_a
+{
+    int16_t azimuth_index;
+    int16_t horizontal_index;
+} zeros;
+
 
 
 

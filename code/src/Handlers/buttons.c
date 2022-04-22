@@ -74,12 +74,9 @@ int configure_dk_buttons_leds(){
 		LOG_ERR("Could not init BUTTONS(err %d", err);
 	}
 
-    // dev = device_get_binding("GPIO_0");
-	// if (dev == NULL) {
-	// 	return;
-	// }
 
 
 	return err;
+}
     
-    }
+    

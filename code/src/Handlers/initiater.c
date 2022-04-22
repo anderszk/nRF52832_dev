@@ -8,6 +8,7 @@ int initiate_modules(){
 	err = timer_start();
 	err = init_bluethooth_scan();
 	err = init_encoder(); // aktiverer per dags dato bare azimuth servomotor
+	set_average_counter(1);
 	// laser_init(15);
 
 

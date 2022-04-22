@@ -33,18 +33,18 @@ int init_encoder(){
     err = servo_init(servo_horizontal_N,servo_horizontal_pin);
     err = servo_init(servo_antenna_N, servo_antenna_pin);
     angle_move_servo(servo_azimuth_N, 0);
-    angle_move_servo(servo_horizontal_N, 25);
+    angle_move_servo(servo_horizontal_N, 38);
     angle_move_servo(servo_antenna_N, 0);
     //test av motor fram og tilbake
-    angle_move_servo(servo_azimuth_N, 90);
-	k_sem_take(&my_sem, K_FOREVER);
-    k_sem_take(&my_sem, K_FOREVER);
-    while(1){
-        angle_slow_move(servo_azimuth_N ,60);
-        k_msleep(2500);
-        angle_slow_move(servo_azimuth_N,90);
-        k_msleep(2500);
-    }
+    // angle_move_servo(servo_azimuth_N, 90);
+	// k_sem_take(&my_sem, K_FOREVER);
+    // k_sem_take(&my_sem, K_FOREVER);
+    // while(1){
+    //     angle_slow_move(servo_azimuth_N ,60);
+    //     k_msleep(2500);
+    //     angle_slow_move(servo_azimuth_N,90);
+    //     k_msleep(2500);
+    // }
 
     
     return err;
