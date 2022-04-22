@@ -21,6 +21,7 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 #define RUN_STATUS_LED DK_LED1
 #define CONN_STATUS_LED DK_LED2
 #define RUN_LED_BLINK_INTERVAL 1000
+extern struct k_sem my_sem;
 
 
 //
@@ -46,6 +47,7 @@ void button_handler(uint32_t button_state, uint32_t has_changed){
                 get_servo_angle(N);
 				break;
 			case DK_BTN4_MSK:
+				k_sem_give(&my_sem);
 				button_pressed = 4;
 				if(N == 0){
 					N = 1;

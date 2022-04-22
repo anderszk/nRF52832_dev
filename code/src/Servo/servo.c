@@ -102,10 +102,9 @@ void raw_move_servo(int N, uint32_t position)
 }
 
 void angle_move_servo(int N, uint32_t angle)
-{   
+{       
     if(N == 0){
         angle += 45;
-        azimuth_servo_angle = angle;
         if (angle >= 270){angle = 270;} 
         else if(angle <= 0){angle = 0;}
         azimuth_servo_angle = angle;
@@ -113,7 +112,6 @@ void angle_move_servo(int N, uint32_t angle)
 
     else if(N == 1){
         angle += 110;
-        horizontal_servo_angle = angle;
         if (angle >= 200){angle = 200;} 
         else if(angle <= 110){angle = 110;}
         horizontal_servo_angle = angle;
@@ -158,5 +156,56 @@ void decrement_servo(int N){
 void get_servo_angle(int N){
     if(N == 0){printk("Azimuth servomotor angle: %d\n", azimuth_servo_angle);}
     else if(N == 1){printk("Horizontal angle: %d\n", horizontal_servo_angle);}
+}
+
+void angle_slow_move(int N, uint32_t angle){
+    if(N == 0){
+        angle += 45;
+        if (angle >= 270){angle = 270;} 
+        else if(angle <= 0){angle = 0;}
+        printk("Old angle: %d, new angle: %d\n", azimuth_servo_angle, angle);
+        int size = angle-azimuth_servo_angle;
+        printk("size: %d\n", size);
+        if(angle > azimuth_servo_angle){
+            printk("going up\n");
+            for(int i = 0; i < size; i++){
+                increment_servo(N);
+                k_msleep(60);
+                }
+            }
+        else if(angle < azimuth_servo_angle){
+            printk("going down:\n");
+            for(int i = 0; i > size; i--){
+                decrement_servo(N);
+                k_msleep(60);
+                }
+            }
+    }
+    if(N == 1){
+        angle += 110;
+        if (angle >= 200){angle = 200;} 
+        else if(angle <= 110){angle = 110;}
+        printk("Old angle: %d, new angle: %d\n", horizontal_servo_angle, angle);
+        int size = angle - horizontal_servo_angle;
+        printk("size: %d\n", size);
+        if(angle > horizontal_servo_angle){
+            printk("going up\n");
+            for(int i = 0; i < size; i++){
+                increment_servo(N);
+                k_msleep(60);
+                }
+            }
+        else if(angle < horizontal_servo_angle){
+            printk("going down:\n");
+            for(int i = 0; i > size; i--){
+                decrement_servo(N);
+                k_msleep(60);
+                }
+
+
+    }
+    int value = azimuth_servo_angle -45;
+    printk("servo azimuth: %d\n", value);
+    }
 }
 

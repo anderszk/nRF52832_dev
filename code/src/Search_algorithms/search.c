@@ -12,31 +12,51 @@ matrix_3x3 readings[270];
 
 
 uint32_t *this_value;
+uint32_t *that_value;
 int *N = 0;
 
-extern void myThread(uint32_t *this_value, int *N){
+extern void myThread_0(uint32_t *this_value){
     while(1){
-        angle_move_servo(*N,*this_value);       
+        angle_move_servo(0,*this_value);       
     }
     printk("Threading done");
 }
 
-K_THREAD_DEFINE(my_tid, MY_STACK_SIZE,
-                myThread, &this_value, &N, NULL,
+K_THREAD_DEFINE(my_tid_0, MY_STACK_SIZE,
+                myThread_0, &this_value, NULL, NULL,
+                MY_PRIORITY, 0, K_TICKS_FOREVER);
+                
+extern void myThread_1(uint32_t *that_value){
+    while(1){
+        angle_move_servo(1,*that_value);       
+    }
+    printk("Threading done");
+}
+
+K_THREAD_DEFINE(my_tid_1, MY_STACK_SIZE,
+                myThread_1, &that_value, NULL, NULL,
                 MY_PRIORITY, 0, K_TICKS_FOREVER);
 
 void sweep_search(int state, int16_t min_encoder_search, int16_t max_encoder_search, int increment){
-    N = state;
-    printk("state: %d", N);
-    k_thread_start(my_tid);
+    k_msleep(1000);
+    printk("state: %d", state);
+    if(state == 0){
+        k_thread_start(my_tid_0);
+        k_thread_resume(my_tid_0);
+        }
+    else{
+        k_thread_start(my_tid_1);
+        k_thread_resume(my_tid_1);
+    }
+
     printk("Starting to search in Azimuth\n");
     int16_t rows = (max_encoder_search-min_encoder_search)/increment;
     printk("rows: %d\n", rows);
     int16_t index = 0;
     matrix_3x3 buffer_data;
-    k_thread_resume(my_tid);
     for (int i = min_encoder_search; i < max_encoder_search; i+= increment){
-        this_value = i;
+        if(state){that_value = i;}
+        else{this_value = i;}
         set_observer(true);
         k_sem_take(&my_sem, K_FOREVER);
         get_data(&buffer_data, state);
@@ -47,7 +67,8 @@ void sweep_search(int state, int16_t min_encoder_search, int16_t max_encoder_sea
         index+=1;
       
     }
-    k_thread_suspend(my_tid);
+    k_thread_suspend(my_tid_0);
+    k_thread_suspend(my_tid_1);
     k_sem_give(&my_sem);
     printk("Azimuth search done\n");
 }
@@ -90,8 +111,9 @@ void fine_sweeper(int state, int threshold_degrees, int threshold_search, int sw
     }
     else{
         printk("Im fucking done\n");
-        angle_move_servo(state,temp_data[zero_point_index].encoder);
-        k_thread_suspend(my_tid);
+        angle_slow_move(state,temp_data[zero_point_index].encoder);
+        k_thread_suspend(my_tid_0);
+        k_thread_suspend(my_tid_1);
         return;
         }
 

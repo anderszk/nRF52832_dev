@@ -12,6 +12,7 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 int16_t azimuth_encoder_value = 0;
 int16_t horizontal_encoder_value = 0;
+extern struct k_sem my_sem;
 
 
 
@@ -34,6 +35,15 @@ int init_encoder(){
     angle_move_servo(servo_azimuth_N, 0);
     angle_move_servo(servo_horizontal_N, 25);
     angle_move_servo(servo_antenna_N, 0);
+    // angle_move_servo(servo_azimuth_N, 90);
+	// k_sem_take(&my_sem, K_FOREVER);
+    // k_sem_take(&my_sem, K_FOREVER);
+    // while(1){
+    //     angle_slow_move(servo_horizontal_N ,25);
+    //     k_msleep(2500);
+    //     angle_slow_move(servo_horizontal_N,60);
+    //     k_msleep(2500);
+    // }
 
     
     return err;

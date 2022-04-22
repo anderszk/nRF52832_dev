@@ -34,6 +34,7 @@ int increment = 1;
 
 
 
+
 void main(void)
 {
 	LOG_INF("Hello World! %s\n", CONFIG_BOARD);
@@ -48,12 +49,12 @@ void main(void)
 		printk("Encoder: %d,  delta: %d, zigma: %d \n", azimuth_reading[i].encoder, azimuth_reading[i].delta, azimuth_reading[i].zigma);
 	}
 	zero_point_index_azimuth = find_zero_point(azimuth_reading, size);
-	angle_move_servo(0, azimuth_reading[zero_point_index_azimuth].encoder);
+	angle_slow_move(0, azimuth_reading[zero_point_index_azimuth].encoder);
 	printk("zero value azimuth: %d",azimuth_reading[zero_point_index_azimuth].encoder);
 	k_msleep(1000);
 	angle_move_servo(2, 90);
 	k_msleep(2000);
-	set_average_counter(2);
+	set_average_counter(3);
 
 	size = (max_encoder_search_horizontal-min_encoder_search_horizontal)/increment;
 	sweep_search(1,min_encoder_search_horizontal, max_encoder_search_horizontal, increment);
@@ -62,7 +63,7 @@ void main(void)
 		printk("Encoder: %d,  delta: %d, zigma: %d \n", horizontal_readings[i].encoder, horizontal_readings[i].delta, horizontal_readings[i].zigma);
 	}
 	zero_point_index_horizontal = find_zero_point(horizontal_readings, size);
-	angle_move_servo(1, horizontal_readings[zero_point_index_horizontal].encoder);
+	angle_slow_move(1, horizontal_readings[zero_point_index_horizontal].encoder);
 	k_msleep(1000);
 	angle_move_servo(2,0);
 	k_msleep(1000);

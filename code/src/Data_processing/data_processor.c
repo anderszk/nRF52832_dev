@@ -1,7 +1,7 @@
 #include "data_processor.h"
 
 #define LOG_MODULE_NAME DATA_PROCESSOR
-#define ZIGMA_ZERO_VALUE -60
+#define ZIGMA_ZERO_VALUE -45
 
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
