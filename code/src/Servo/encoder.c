@@ -35,15 +35,16 @@ int init_encoder(){
     angle_move_servo(servo_azimuth_N, 0);
     angle_move_servo(servo_horizontal_N, 25);
     angle_move_servo(servo_antenna_N, 0);
-    // angle_move_servo(servo_azimuth_N, 90);
-	// k_sem_take(&my_sem, K_FOREVER);
-    // k_sem_take(&my_sem, K_FOREVER);
-    // while(1){
-    //     angle_slow_move(servo_horizontal_N ,25);
-    //     k_msleep(2500);
-    //     angle_slow_move(servo_horizontal_N,60);
-    //     k_msleep(2500);
-    // }
+    //test av motor fram og tilbake
+    angle_move_servo(servo_azimuth_N, 90);
+	k_sem_take(&my_sem, K_FOREVER);
+    k_sem_take(&my_sem, K_FOREVER);
+    while(1){
+        angle_slow_move(servo_azimuth_N ,60);
+        k_msleep(2500);
+        angle_slow_move(servo_azimuth_N,90);
+        k_msleep(2500);
+    }
 
     
     return err;
