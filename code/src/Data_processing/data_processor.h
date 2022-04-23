@@ -9,8 +9,8 @@ typedef struct data_s
 
 typedef struct data_a
 {
-    int16_t azimuth_index;
-    int16_t horizontal_index;
+    int16_t azimuth;
+    int16_t elevation;
 } zeros;
 
 

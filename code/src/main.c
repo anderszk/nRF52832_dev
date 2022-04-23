@@ -9,8 +9,7 @@
 // #include "initiater.h"
 
 #include "initiater.h"
-
-
+#include "nrfx_qdec.h"
 #define LOG_MODULE_NAME app
 #define WORKING_AREA_AZIMUTH 180
 #define WORKING_AREA_HORIZONTAL 90
@@ -41,16 +40,11 @@ void main(void)
 	initiate_modules();
 	k_sem_take(&my_sem, K_FOREVER);
 	zero_enc_values = coarse_search();
-	printk("azimuth zero enc: %d, horizontal zero end: %d", zero_enc_values.azimuth_index, zero_enc_values.horizontal_index);
+	printk("azimuth zero enc: %d, horizontal zero end: %d", zero_enc_values.azimuth, zero_enc_values.elevation);
 	zero_enc_values = fine_search(zero_enc_values);
 	k_msleep(2000000);
-
-
 	printk("Search is done\n");
 	printk("Main:\n");
-
-	
-
 
 	while(1){
 		k_sleep(K_FOREVER);
