@@ -1,33 +1,34 @@
 #include <zephyr.h>
 #include <sys/printk.h>
-#include <logging/log.h>
-#include <devicetree.h>
 #include <drivers/gpio.h>
 #include <nrfx_qdec.h>
 
-
 const uint32_t pin_a = 26;
 const uint32_t pin_b = 27;
-uint16_t inc = 0;
 
-static volatile int16_t acc_data = 0;
-static volatile uint16_t accdbl_data = 0;
+// static volatile int16_t acc_data = 0;
+// static volatile uint16_t accdbl_data = 0;
+
+int16_t tisss = 0;
+int16_t bassj = 0;
+
+int32_t test = 0;
+NRF_QDEC_Type tiss;
 
 
 static void qdec_nrfx_event_handler(nrfx_qdec_event_t event)
 {
+
    if (event.type == NRF_QDEC_EVENT_REPORTRDY) {
-       acc_data = event.data.report.acc;
-       accdbl_data = event.data.report.accdbl;
-    //    printk("Data1: %u\n", acc_data);
-        if(acc_data <0){
-            inc++;
-        }
-        else{
-            inc--;
-        }
-        printk("Data1: %u\n", inc);
-        //printk("Data2: %u\n", accdbl_data);
+       //acc_data = event.data.report.acc;
+       //accdbl_data = event.data.report.accdbl;
+       //int sample_value = event.data.sample.value;
+
+        tisss = event.data.report.acc;
+        bassj = event.data.report.accdbl;
+        //test = nrf_qdec_acc_get(&tiss);
+        nrfx_qdec_accumulators_read(&tisss, &bassj);
+        printk("ACC: %d, ACCBL %d \n", tisss, bassj);
    }
    
 }
@@ -39,7 +40,7 @@ void main(void)
 
     nrfx_qdec_config_t qdec_config = 
     {                                                                
-        .reportper          = NRF_QDEC_REPORTPER_10,                 
+        .reportper          = NRF_QDEC_REPORTPER_40,                 
         .sampleper          = NRF_QDEC_SAMPLEPER_128us,            
         .psela              = pin_a,                                
         .pselb              = pin_b,                                
@@ -61,15 +62,17 @@ void main(void)
     }
 	else {printk("QDEC initialization failed.\n");}
 
+
     nrfx_qdec_enable();
+    //nrf_qdec_enable(&tiss);
 
 
     printk("Running...\n");
 
-
     while(1)
 	{
-		__WFI();
+		k_msleep(1);
+        //__WFI();
 	}
 
 }
