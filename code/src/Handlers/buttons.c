@@ -36,23 +36,27 @@ void button_handler(uint32_t button_state, uint32_t has_changed){
 			
 			case DK_BTN1_MSK:
 				button_pressed = 1;
-                increment_servo(N);
+                angle_slow_move(N,0);
 				break;
 			case DK_BTN2_MSK:
 			    button_pressed = 2;
-                decrement_servo(N);
+                angle_slow_move(N,90);
 				break;
 			case DK_BTN3_MSK:
 				button_pressed = 3;
-                get_servo_angle(N);
+                printk("angle: %d",get_servo_angle(N));
 				break;
 			case DK_BTN4_MSK:
 				k_sem_give(&my_sem);
 				button_pressed = 4;
 				if(N == 0){
 					N = 1;
+					init_encoder_elevation();
 				}
-				else {N = 0;}
+				else {
+					N = 0;
+					init_encoder_azimuth();
+				}
 				break;
 			default:
 				break;
