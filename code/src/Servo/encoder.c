@@ -23,6 +23,11 @@ int16_t azimuth_encoder_degrees;
 int16_t elevation_encoder_degrees;
 extern struct k_sem my_sem;
 
+static void qdec_nrfx_event_handler_azimuth(nrfx_qdec_event_t event){}
+static void qdec_nrfx_event_handler_elevation(nrfx_qdec_event_t event){}
+
+
+
 void update_encoder(int N){
     int16_t acc;
     int16_t accdbl;
@@ -48,18 +53,13 @@ int16_t get_encoder(int N){//fake encoder verdier som gjenspeiler servo vinkelen
     }
 }
 
-static void qdec_nrfx_event_handler_azimuth(nrfx_qdec_event_t event){
-
-}
-
-static void qdec_nrfx_event_handler_elevation(nrfx_qdec_event_t event){
-
-}
-
 int init_encoder_azimuth(){
+
     int err;
     nrfx_qdec_disable();
     nrfx_qdec_uninit();
+    
+
     nrfx_qdec_config_t qdec_config_azimuth = 
     {                                                                
         .reportper          = NRF_QDEC_REPORTPER_DISABLED,                 
@@ -80,10 +80,19 @@ int init_encoder_azimuth(){
     }
 	else {printk("Azimuth QDEC initialization failed.\n");}
     nrfx_qdec_enable();
+
     return err;
 }
 
+void set_encoder(int value, int N){
+    if(N < 1){
+        azimuth_encoder_value = value;}
+    else{elevation_encoder_value = value;}
+}
+
+
 int init_encoder_elevation(){
+
     int err;
     nrfx_qdec_disable();
     nrfx_qdec_uninit();
@@ -111,12 +120,12 @@ int init_encoder_elevation(){
     }
 	else {printk("Elevation QDEC initialization failed.\n");}
     nrfx_qdec_enable();
+
     return err;
 }
 
 
 int init_encoder_servos(){
-    //Masse encoder inits
 	int err = servo_init(servo_azimuth_N, servo_azimuth_pin);
     err = servo_init(servo_horizontal_N,servo_horizontal_pin);
     err = servo_init(servo_antenna_N, servo_antenna_pin);
@@ -129,15 +138,10 @@ int init_encoder_servos(){
 
     IRQ_CONNECT(QDEC_IRQn, 4, nrfx_isr, nrfx_qdec_irq_handler, 0);
 	irq_enable(QDEC_IRQn);
+
     return err;
-
 }
 
-void set_encoder(int value, int N){
-    if(N < 1){
-        azimuth_encoder_value = value;}
-    else{elevation_encoder_value = value;}
-}
 
 void angle_slow_move(int N, uint32_t angle){
     if(N == 0){
@@ -151,7 +155,7 @@ void angle_slow_move(int N, uint32_t angle){
             printk("going up\n");
             for(int i = 0; i < size; i++){
                 increment_servo(N);
-                k_msleep(80);
+                k_msleep(90);
                 update_encoder(N);
                 }
             }
@@ -159,10 +163,12 @@ void angle_slow_move(int N, uint32_t angle){
             printk("going down:\n");
             for(int i = 0; i > size; i--){
                 decrement_servo(N);
-                k_msleep(80);
+                k_msleep(90);
                 update_encoder(N);
                 }
             }
+        // int value = get_servo_angle(0) -45;
+        // printk("servo azimuth: %d\n", value);
     }
     if(N == 1){
         angle += 110;
@@ -187,9 +193,7 @@ void angle_slow_move(int N, uint32_t angle){
                 update_encoder(N);
                 }
         }
-
-
-    int value = get_servo_angle(0) -45;
-    printk("servo azimuth: %d\n", value);
+        // int value = get_servo_angle(1) -45;
+        // printk("servo elevation: %d\n", value);
     }
 }

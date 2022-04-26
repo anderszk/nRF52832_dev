@@ -11,27 +11,11 @@
 #include "initiater.h"
 #include "nrfx_qdec.h"
 #define LOG_MODULE_NAME app
-#define WORKING_AREA_AZIMUTH 180
-#define WORKING_AREA_HORIZONTAL 90
-
-
 
 K_SEM_DEFINE(my_sem,0,1);
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
-// matrix_3x3 azimuth_reading[WORKING_AREA_AZIMUTH];
-// matrix_3x3 horizontal_readings[WORKING_AREA_HORIZONTAL];
-int zero_point_index_azimuth;
-int zero_point_index_horizontal;
-int16_t min_encoder_search_azimuth = 0;
-int16_t max_encoder_search_azimuth = 180;
-int16_t min_encoder_search_horizontal = 0;
-int16_t max_encoder_search_horizontal = 90;
-int increment = 1;
 zeros zero_enc_values;
-
-
-
 
 
 void main(void)
@@ -42,9 +26,8 @@ void main(void)
 	zero_enc_values = coarse_search();
 	printk("azimuth zero enc: %d, horizontal zero end: %d", zero_enc_values.azimuth, zero_enc_values.elevation);
 	zero_enc_values = fine_search(zero_enc_values);
-	k_msleep(2000000);
 	printk("Search is done\n");
-	printk("Main:\n");
+	printk("Zeroes found at Azimuth: %d, Elevation: %d", zero_enc_values.azimuth, zero_enc_values.elevation);
 
 	while(1){
 		k_sleep(K_FOREVER);

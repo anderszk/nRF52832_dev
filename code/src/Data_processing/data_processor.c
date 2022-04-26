@@ -2,6 +2,8 @@
 
 #define LOG_MODULE_NAME DATA_PROCESSOR
 #define ZIGMA_ZERO_VALUE -45
+#define MIN_VALID_RSSI -90
+#define MAX_VALID_RSSI -10
 
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
@@ -38,12 +40,8 @@ int16_t get_average(int16_t *list){
 
 void value_validater(matrix_3x3 *raw_data, int16_t *n){
 
-    int16_t max_value = -10;
-    int16_t min_value = -90;
-    printk("n: %d \n", *n);
-
     for(int i = 0; i < *n; i++){
-        if(raw_data[i].delta > max_value || raw_data[i].delta  < min_value || raw_data[i].zigma > max_value || raw_data[i].zigma  < min_value){
+        if(raw_data[i].delta > MAX_VALID_RSSI || raw_data[i].delta  < MIN_VALID_RSSI || raw_data[i].zigma > MAX_VALID_RSSI || raw_data[i].zigma  < MIN_VALID_RSSI){
             raw_data[i].encoder = 0;
             raw_data[i].delta = 0;
             raw_data[i].zigma = 0;
@@ -53,7 +51,7 @@ void value_validater(matrix_3x3 *raw_data, int16_t *n){
 }
 
 void update_matrix(matrix_3x3 *data, int16_t *n){
-    printk("n: %d\n", *n);
+
     for(int i = 0; i < *n; i++){
         if(data[i].delta == 0 || data[i].zigma == 0){
             printk("Changed values at: %d", data[i].encoder);
@@ -68,6 +66,7 @@ void update_matrix(matrix_3x3 *data, int16_t *n){
 }
 
 bool zero_point_validater(int16_t value_zigma, int16_t value_delta){
+
     int16_t treshold_zigma = ZIGMA_ZERO_VALUE;
     if(value_zigma >= treshold_zigma && value_delta < value_zigma){
         return true;
@@ -79,9 +78,10 @@ int find_zero_point(matrix_3x3 validated_values[], int n){
     printk("size: %d\n", n);
     int zero_point_index = 1;
 
-    // if(n == 1){
-    //     return 0;
-    // }
+    if(n == 1){
+        return 0;
+    }
+    //Se om denne funksjonen virker:
     // if(validated_values[0].delta <= validated_values[1].delta && zero_point_validater(validated_values[0].zigma, validated_values[0].delta)){
     //     zero_point_index = 0;
     // }
@@ -104,7 +104,6 @@ int find_zero_point(matrix_3x3 validated_values[], int n){
 }
 
 
-
 void set_fake_values(matrix_3x3 *matrix){
 	matrix[22].delta = -77;
 	matrix[9].zigma = 33;
@@ -122,37 +121,4 @@ void set_average_counter(int16_t value){
     average_counter = value;
 }
 
-
-// int find_local_minima(int data_array[][3]){
-
-//     int16_t nulls_encoder_values[270];
-//     int nulls_minimum_indexes[270];
-//     int nulls_maximum_indexes[270];
-//     int append_index_delta = 0;
-//     int append_index_zigma = 0;
-
-//     if(data_array[0][1] < data_array[1][1]){
-//         nulls_maximum_indexes[append_index_delta] = 0;
-//         append_index_delta += 1;
-//     }
-//     else if(data_array[0][2] > data_array[1][2]){
-//         nulls_maximum_indexes[append_index_zigma] = 0;
-//         append_index_zigma += 1;
-//     }
-//     for(int i = 1; i < sizeof(data_array); i++){
-//         if(data_array[i-1][1] > data_array[i][1] && data_array[i][1] < data_array[i+1][1]){
-//             nulls_minimum_indexes[append_index_delta] = i;
-//             append_index_delta += 1;
-//         }
-//         else if(data_array[i-1][2] < data_array[i][2] && data_array[i][2] > data_array[i+1][2]){
-//             nulls_maximum_indexes[append_index_zigma] = i;
-//             append_index_zigma += 1;
-
-//         }
-//     }
-
-
-
-//     return 0; //returnere minimum punktene som må videre undersøkes
-// }
 

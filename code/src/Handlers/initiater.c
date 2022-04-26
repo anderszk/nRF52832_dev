@@ -7,7 +7,7 @@ int initiate_modules(){
 	err = timer_init();
 	err = timer_start();
 	err = init_bluethooth_scan();
-	err = init_encoder_servos(); // aktiverer per dags dato bare azimuth servomotor
+	err = init_encoder_servos(); 
 	set_average_counter(1);
 	err = init_encoder_azimuth();
 	

@@ -1,25 +1,11 @@
 #include "buttons.h"
 #define LOG_MODULE_NAME BUTTONS_LEDS
-
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 
-/* The devicetree node identifier for the "led0" alias. */
-// #define LED0_NODE DT_ALIAS(led0)
-
-// #if DT_NODE_HAS_STATUS(LED0_NODE, okay)
-// #define LED0	DT_GPIO_LABEL(LED0_NODE, gpios)
-// #define PIN	DT_GPIO_PIN(LED0_NODE, gpios)
-// #define FLAGS	DT_GPIO_FLAGS(LED0_NODE, gpios)
-// #else
-// #define LED0	""
-// #define PIN	0
-// #define FLAGS	0
-// #endif
 
 //LEDS
-#define RUN_STATUS_LED DK_LED1
-#define CONN_STATUS_LED DK_LED2
+
 #define RUN_LED_BLINK_INTERVAL 1000
 extern struct k_sem my_sem;
 
@@ -77,9 +63,6 @@ int configure_dk_buttons_leds(){
 	if(err){
 		LOG_ERR("Could not init BUTTONS(err %d", err);
 	}
-
-
-
 	return err;
 }
     

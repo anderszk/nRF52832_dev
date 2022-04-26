@@ -7,8 +7,8 @@ extern int16_t average_counter;
 LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 extern struct k_sem my_sem; 
-bool send_data_state = false;
 const struct device *dev;
+bool send_data_state = false;
 
 int set_observer(bool state){
 	int err = 1;
@@ -17,9 +17,6 @@ int set_observer(bool state){
 
 }
 
-void set_switch(int state){
-	//set gpio switch to value;
-}
 
 static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 			 struct net_buf_simple *ad)
@@ -30,7 +27,6 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 		static bool delta_zigma_state = false; // 0 = delta, 1 = zigma
 		if(!delta_zigma_state){
 			rssi = KALMAN(rssi);
-			// printk("counter: %d, rssi: %d, zigma: %d\n",counter,rssi,delta_zigma_state);
 			send_data_delta( rssi, counter);
 			counter +=1;
 			if(counter >= average_counter){
@@ -41,7 +37,6 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 		}
 		else if(delta_zigma_state){
 			rssi = KALMAN_ZIG(rssi);
-			// printk("counter: %d, rssi: %d, zigma: %d \n",counter,rssi, delta_zigma_state);
 			send_data_zigma(rssi, counter);
 			counter += 1;
 			if(counter >= average_counter){
@@ -55,15 +50,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 		}
 
 	}
-
 	// else{printk("rssi: %d\n", KALMAN(rssi));}
-
-	
-
-
-
-
-
 }
 
 
