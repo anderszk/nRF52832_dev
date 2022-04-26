@@ -45,7 +45,7 @@
 
 #define ENC1_CH_A       21  // Check if it collides with RESET function when used with encoder
 #define ENC1_CH_B       22  // Encoders may have a problem with interfering with radio reciever if the frequency is too high,
-#define ENC2_CH_A       23  // concider changing to pins other than P0.22 - P0.31, i.e. change with servo.
+#define ENC2_CH_A       23  // concider changing to pins other than P0.22 - P0.31, e.g. change with servo.
 #define ENC2_CH_B       24
 
 #define EXT_BTN1        25
