@@ -19,13 +19,10 @@ void send_data_zigma(int16_t rssi, int index){
     data_zigma[index] = rssi;
 }
 
-void get_data(matrix_3x3 *buffer_data, int N){
-
-    buffer_data->encoder =  get_encoder(N);
-    buffer_data->delta =  get_average(data_delta);
-    buffer_data->zigma =  get_average(data_zigma);
-
+void set_average_counter(int16_t value){
+    average_counter = value;
 }
+
 
 int16_t get_average(int16_t *list){
     int16_t average = 0;
@@ -38,7 +35,15 @@ int16_t get_average(int16_t *list){
 }
 
 
-void value_validater(matrix_3x3 *raw_data, int16_t *n){
+void get_data(matrix_x3 *buffer_data, int N){
+
+    buffer_data->encoder =  get_encoder(N);
+    buffer_data->delta =  get_average(data_delta);
+    buffer_data->zigma =  get_average(data_zigma);
+
+}
+
+void value_validater(matrix_x3 *raw_data, int16_t *n){
 
     for(int i = 0; i < *n; i++){
         if(raw_data[i].delta > MAX_VALID_RSSI || raw_data[i].delta  < MIN_VALID_RSSI || raw_data[i].zigma > MAX_VALID_RSSI || raw_data[i].zigma  < MIN_VALID_RSSI){
@@ -50,7 +55,7 @@ void value_validater(matrix_3x3 *raw_data, int16_t *n){
     }
 }
 
-void update_matrix(matrix_3x3 *data, int16_t *n){
+void update_matrix(matrix_x3 *data, int16_t *n){
 
     for(int i = 0; i < *n; i++){
         if(data[i].delta == 0 || data[i].zigma == 0){
@@ -74,7 +79,7 @@ bool zero_point_validater(int16_t value_zigma, int16_t value_delta){
     else{ return false;}
 }
 
-int find_zero_point(matrix_3x3 validated_values[], int n){
+int find_zero_point(matrix_x3 validated_values[], int n){
     printk("size: %d\n", n);
     int zero_point_index = 1;
 
@@ -104,7 +109,7 @@ int find_zero_point(matrix_3x3 validated_values[], int n){
 }
 
 
-void set_fake_values(matrix_3x3 *matrix){
+void set_fake_values(matrix_x3 *matrix){
 	matrix[22].delta = -77;
 	matrix[9].zigma = 33;
     matrix[0].delta = -99;
@@ -117,8 +122,6 @@ void set_fake_values(matrix_3x3 *matrix){
 	    
 }
 
-void set_average_counter(int16_t value){
-    average_counter = value;
-}
+
 
 

@@ -104,8 +104,9 @@ int init_bluethooth_scan(){
 		return err;
 	}
 	err = gpio_pin_configure(dev, switch_pin, GPIO_OUTPUT_ACTIVE | GPIO_ACTIVE_LOW);
-	if (err < 0) {
-		return;
+	if (err) {
+		LOG_ERR("Configuring pin failed (err %d)\n", err);
+		return err;
 	}
 	gpio_pin_set(dev, switch_pin, 1);
 	k_sem_give(&my_sem);

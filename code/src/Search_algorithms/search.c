@@ -13,9 +13,9 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 
 extern struct k_sem my_sem;
-matrix_3x3 readings[MAX_READINGS];
-matrix_3x3 azimuth_readings[AZIMUTH_DEGREES];
-matrix_3x3 elevation_readings[ELEVATION_DEGREES];
+matrix_x3 readings[MAX_READINGS];
+matrix_x3 azimuth_readings[AZIMUTH_DEGREES];
+matrix_x3 elevation_readings[ELEVATION_DEGREES];
 
 
 uint32_t *azimuth_thread_servo_angle;
@@ -51,11 +51,11 @@ zeros fine_search(zeros enc_values){
     k_msleep(1000);
 	fine_zeros.azimuth = fine_sweeper(0,10,10,20,enc_values.azimuth);
     k_msleep(1000);
-	// angle_move_servo(2,90);
-	// k_msleep(1000);
-	// fine_zeros.elevation = fine_sweeper(1, 10, 10, 20, enc_values.elevation);
-	// k_msleep(1000);
-	// angle_move_servo(2,0);
+	angle_move_servo(2,90);
+	k_msleep(1000);
+	fine_zeros.elevation = fine_sweeper(1, 10, 10, 20, enc_values.elevation);
+	k_msleep(1000);
+	angle_move_servo(2,0);
 
     return fine_zeros;
 }
@@ -89,20 +89,20 @@ zeros coarse_search(){
     // printk("index:%d\n",zero_point_index_azimuth);
 	// printk("zero value azimuth: %d\n",azimuth_readings[zero_point_index_azimuth].encoder);
     
-    // k_msleep(1000);
-    // angle_move_servo(2, 90);
-    // k_msleep(1000);
+    k_msleep(1000);
+    angle_move_servo(2, 90);
+    k_msleep(1000);
 
-    // init_encoder_elevation();
-	// set_average_counter(3);
-	// size = (max_encoder_search_elevation-min_encoder_search_elevation)/increment;
+    init_encoder_elevation();
+	set_average_counter(3);
+	size = (max_encoder_search_elevation-min_encoder_search_elevation)/increment;
     printk("Starting coarse sweep in Elevation\n");
 
-	// sweep_search(1,min_encoder_search_elevation, max_encoder_search_elevation, increment);
-	// get_readings(&elevation_readings, &size);
-    // zero_point_index_elevation = find_zero_point(elevation_readings, size);
-    // coarse_zeros.elevation = elevation_readings[zero_point_index_elevation].encoder;
-	// angle_slow_move(1, elevation_readings[zero_point_index_elevation].encoder);
+	sweep_search(1,min_encoder_search_elevation, max_encoder_search_elevation, increment);
+	get_readings(&elevation_readings, &size);
+    zero_point_index_elevation = find_zero_point(elevation_readings, size);
+    coarse_zeros.elevation = elevation_readings[zero_point_index_elevation].encoder;
+	angle_slow_move(1, elevation_readings[zero_point_index_elevation].encoder);
     printk("Coarse sweep in Elevation done\n");
 
 
@@ -126,7 +126,7 @@ void sweep_search(int state, int16_t min_encoder_search, int16_t max_encoder_sea
     k_msleep(1000);
 
     int16_t index = 0;
-    matrix_3x3 buffer_data;    
+    matrix_x3 buffer_data;    
 
     if(state == 0){
         k_thread_start(my_tid_0);
@@ -161,7 +161,7 @@ void sweep_search(int state, int16_t min_encoder_search, int16_t max_encoder_sea
 
 int16_t fine_sweeper(int state, int threshold_degrees, int threshold_search, int sweep_sector, int zero_point){
 
-    matrix_3x3 temp_data[sweep_sector + 1];
+    matrix_x3 temp_data[sweep_sector + 1];
     int increment = 1;
     int16_t zero_point_index;
     int16_t min_encoder_value = zero_point - (sweep_sector/2);
@@ -213,7 +213,7 @@ int16_t fine_sweeper(int state, int threshold_degrees, int threshold_search, int
 }
 
 
-int get_readings(matrix_3x3 *main_readings, int16_t *n){
+int get_readings(matrix_x3 *main_readings, int16_t *n){
 
     value_validater(&readings, n);
     update_matrix(&readings, n);
