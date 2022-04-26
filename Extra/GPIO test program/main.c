@@ -29,7 +29,7 @@
 #define LED_FLAGS       DT_GPIO_FLAGS(DT_ALIAS(led0), gpios)
 #define BTN_FLAGS       DT_GPIO_FLAGS(DT_ALIAS(sw0), gpios)
 
-#define SERVO1_PIN      2
+#define SERVO1_PIN      2   // Servo pins could possibly be changed with encoder if encoders interfere with RF signal.
 #define SERVO2_PIN      3
 #define SERVO3_PIN      4
 
@@ -43,9 +43,9 @@
 #define LED3_PIN        19
 #define LED4_PIN        20
 
-#define ENC1_CH_A       21
-#define ENC1_CH_B       22
-#define ENC2_CH_A       23
+#define ENC1_CH_A       21  // Check if it collides with RESET function when used with encoder
+#define ENC1_CH_B       22  // Encoders may have a problem with interfering with radio reciever if the frequency is too high,
+#define ENC2_CH_A       23  // concider changing to pins other than P0.22 - P0.31, i.e. change with servo.
 #define ENC2_CH_B       24
 
 #define EXT_BTN1        25
