@@ -1,8 +1,4 @@
 #include <bluetooth/bluetooth.h>
-
-
-
-
 #include "kalman_filter.h"
 #include "data_processor.h"
 

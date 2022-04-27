@@ -26,7 +26,7 @@ void laser_toggle()
     gpio_pin_toggle(dev, _laser_pin);
 }
 
-void laser_set(bool state)
+void laser_set(int state)
 {
     gpio_pin_set(dev, _laser_pin, state);
 }

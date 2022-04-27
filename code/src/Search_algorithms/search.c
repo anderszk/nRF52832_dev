@@ -9,6 +9,7 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 #define MAX_READINGS 270
 #define AZIMUTH_DEGREES 180
 #define ELEVATION_DEGREES 180
+#define SEARCH_PLANES 1
 
 
 
@@ -69,21 +70,23 @@ zeros fine_search(zeros enc_values){
     azimuth_thread_servo_angle = fine_zeros.azimuth;
     validate_servo_zero_moved(0, azimuth_thread_servo_angle);
     k_thread_suspend(my_tid_0);
+    
+    if(SEARCH_PLANES > 1){
+        k_msleep(1000);
+        angle_move_servo(2,90);
+        k_msleep(1000);
 
-    k_msleep(1000);
-	angle_move_servo(2,90);
-	k_msleep(1000);
+        printk("Elevation zero point for fine sweep: %d\n", enc_values.elevation);
+        init_encoder_elevation();
+        k_thread_resume(my_tid_1);
+        fine_zeros.elevation = fine_sweeper(1, 10, 10, 20, enc_values.elevation);
+        elevation_thread_servo_angle = fine_zeros.elevation;
+        validate_servo_zero_moved(1, elevation_thread_servo_angle);
+        k_thread_suspend(my_tid_1);
 
-    printk("Elevation zero point for fine sweep: %d\n", enc_values.elevation);
-    init_encoder_elevation();
-    k_thread_resume(my_tid_1);
-	fine_zeros.elevation = fine_sweeper(1, 10, 10, 20, enc_values.elevation);
-    elevation_thread_servo_angle = fine_zeros.elevation;
-    validate_servo_zero_moved(1, elevation_thread_servo_angle);
-    k_thread_suspend(my_tid_1);
-
-    k_msleep(1000);
-	angle_move_servo(2,0);
+        k_msleep(1000);
+        angle_move_servo(2,0);
+    }
 
     return fine_zeros;
 }
@@ -118,40 +121,42 @@ zeros coarse_search(){
 		printk("Encoder: %d,  delta: %d, zigma: %d \n", azimuth_readings[i].encoder, azimuth_readings[i].delta, azimuth_readings[i].zigma);
 	}
 
-    k_msleep(1000);
-    angle_move_servo(2, 90);
-    k_msleep(1000);
+    if (SEARCH_PLANES > 1){
+        k_msleep(1000);
+        angle_move_servo(2, 90);
+        k_msleep(1000);
 
-    init_encoder_elevation();
-	set_average_counter(3);
-	size = (max_encoder_search_elevation-min_encoder_search_elevation)/increment;
+        init_encoder_elevation();
+        set_average_counter(3);
+        size = (max_encoder_search_elevation-min_encoder_search_elevation)/increment;
 
-    printk("Starting coarse sweep in Elevation\n");
-    k_thread_start(my_tid_1);
-	sweep_search(1,min_encoder_search_elevation, max_encoder_search_elevation, increment);
-	get_readings(&elevation_readings, &size);
+        printk("Starting coarse sweep in Elevation\n");
+        k_thread_start(my_tid_1);
+        sweep_search(1,min_encoder_search_elevation, max_encoder_search_elevation, increment);
+        get_readings(&elevation_readings, &size);
 
-    zero_point_index_elevation = find_zero_point(elevation_readings, size);
-    coarse_zeros.elevation = elevation_readings[zero_point_index_elevation].encoder;
-    printk("Elevation zero at: %d\n", coarse_zeros.elevation);
+        zero_point_index_elevation = find_zero_point(elevation_readings, size);
+        coarse_zeros.elevation = elevation_readings[zero_point_index_elevation].encoder;
+        printk("Elevation zero at: %d\n", coarse_zeros.elevation);
 
-    elevation_thread_servo_angle = coarse_zeros.elevation;
-    validate_servo_zero_moved(1, elevation_thread_servo_angle);
-    k_thread_suspend(my_tid_1);
+        elevation_thread_servo_angle = coarse_zeros.elevation;
+        validate_servo_zero_moved(1, elevation_thread_servo_angle);
+        k_thread_suspend(my_tid_1);
 
-    printk("Coarse sweep in Elevation done\n");
+        printk("Coarse sweep in Elevation done\n");
 
 
-    for(int i = 0; i < size; i++){
-		printk("Encoder: %d,  delta: %d, zigma: %d \n", elevation_readings[i].encoder, elevation_readings[i].delta, elevation_readings[i].zigma);
-	}
+        for(int i = 0; i < size; i++){
+            printk("Encoder: %d,  delta: %d, zigma: %d \n", elevation_readings[i].encoder, elevation_readings[i].delta, elevation_readings[i].zigma);
+        }
 
-    printk("index:%d\n",zero_point_index_elevation);
-	printk("zero value azimuth: %d\n",elevation_readings[zero_point_index_elevation].encoder);
+        printk("index:%d\n",zero_point_index_elevation);
+        printk("zero value azimuth: %d\n",elevation_readings[zero_point_index_elevation].encoder);
 
-    k_msleep(1000);
-    angle_move_servo(2, 0);
-    k_msleep(1000);
+        k_msleep(1000);
+        angle_move_servo(2, 0);
+        k_msleep(1000);
+    }
 
     return coarse_zeros;
 }

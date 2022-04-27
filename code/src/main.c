@@ -31,7 +31,8 @@ void main(void)
 	printk("Search is done\n");
 	printk("Zeroes found at Azimuth: %d, Elevation: %d\n", zero_enc_values.azimuth, zero_enc_values.elevation);
 	angle_move_servo(0,zero_enc_values.azimuth);
-	angle_move_servo(1, zero_enc_values.elevation);
+	// angle_move_servo(1, zero_enc_values.elevation);
+	laser_set(0);
 
 	while(1){
 		k_sleep(K_FOREVER);

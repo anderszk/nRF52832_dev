@@ -98,7 +98,7 @@ int init_encoder_servos(){
     err = servo_init(servo_horizontal_N,servo_horizontal_pin);
     err = servo_init(servo_antenna_N, servo_antenna_pin);
     angle_move_servo(servo_azimuth_N, 0);
-    angle_move_servo(servo_horizontal_N, 20);
+    angle_move_servo(servo_horizontal_N, 23);
     angle_move_servo(servo_antenna_N, 0);
  
     
@@ -166,5 +166,13 @@ void angle_slow_move(int N, uint32_t angle){
             k_msleep(60);
             update_encoder(N);
             }
+    }
+}
+int16_t get_encoder(int N){//fake encoder verdier som gjenspeiler servo vinkelen så bra den kan
+    if(N < 1){
+        return azimuth_encoder_degrees;
+    }
+    else{
+        return elevation_encoder_degrees;
     }
 }

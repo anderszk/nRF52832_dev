@@ -14,8 +14,8 @@ int initiate_modules(){
 	set_average_counter(1);
 	err = init_encoder_azimuth();
 	
-	// laser_init(15);
-
-
+	laser_init(29);
+	laser_set(1);
+	
     return err;
 }

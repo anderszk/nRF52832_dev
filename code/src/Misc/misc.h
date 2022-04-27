@@ -9,7 +9,7 @@
  * 
  * @param laser_pin Pin connected to laser +5v (nRF52 not compatible with 5v on gpio).
  */
-void laser_init(int laser_pin);
+void laser_init();
 
 /**
  * @brief Toggles laser pointer on or off
@@ -20,6 +20,6 @@ void laser_toggle(void);
 /**
  * @brief Set laser to state.
  * 
- * @param state Boolean, 1 for on, 0 for off.
+ * @param state int, 0 for on, 1 for off.
  */
-void laser_set(bool state);
+void laser_set(int state);
