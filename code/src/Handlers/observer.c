@@ -10,10 +10,8 @@ extern struct k_sem my_sem;
 const struct device *dev;
 bool send_data_state = false;
 
-int set_observer(bool state){
-	int err = 1;
+void set_observer(bool state){
 	send_data_state = state;
-	return err = 0;
 
 }
 

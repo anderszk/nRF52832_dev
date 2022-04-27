@@ -18,7 +18,7 @@ void laser_init(int laser_pin)
 
     _laser_pin = laser_pin;
 
-    printk("Laser init successfull.\n");
+    printk("Laser init successfull.");
 }
 
 void laser_toggle()

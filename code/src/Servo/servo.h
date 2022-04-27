@@ -65,3 +65,4 @@ void increment_servo(int N);
 void decrement_servo(int N);
 int16_t get_servo_angle(int N);
 void angle_slow_move(int N, uint32_t angle);
+void set_servo_angle(int N, uint32_t angle);

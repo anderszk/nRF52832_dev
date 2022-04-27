@@ -29,4 +29,3 @@ void update_matrix(matrix_x3 *data, int16_t *n);
 bool zero_point_validater(int16_t value_zigma, int16_t value_delta);
 int find_zero_point(matrix_x3 validated_values[], int n);
 
-void set_fake_values(matrix_x3 *matrix);//brukes for fake verdier.

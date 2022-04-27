@@ -51,7 +51,6 @@ uint32_t horizontal_servo_angle;
 int servo_init(uint32_t N, int servo_pin)
 {
     if(N>3) {
-        // Invalid N.
         return 1;
     }
     
@@ -91,13 +90,8 @@ void raw_move_servo(int N, uint32_t position)
         LOG_INF("Invalid N, %u > 3", N);
         return;
     }
-    if (position <= 0)
-    {
-        position = 1;
-    } else if (position >= TIMER_RELOAD)
-    {
-        position = TIMER_RELOAD - 1;
-    }
+    position = (position <= 0) ? 1 : (position >= TIMER_RELOAD) ? TIMER_RELOAD - 1 : position;
+ 
     NRF_TIMER3->CC[pwmN_timer_cc_num[N]] = position;
 }
 
@@ -105,15 +99,15 @@ void angle_move_servo(int N, uint32_t angle)
 {       
     if(N == 0){
         angle += 45;
-        if (angle >= 270){angle = 270;} 
-        else if(angle <= 0){angle = 0;}
+        if (angle >= 225){angle = 225;} 
+        else if(angle <= 45){angle = 45;}
         azimuth_servo_angle = angle;
     }
 
     else if(N == 1){
-        angle += 110;
+        angle += 130;
         if (angle >= 200){angle = 200;} 
-        else if(angle <= 110){angle = 110;}
+        else if(angle <= 130){angle = 130;}
         horizontal_servo_angle = angle;
     }
 
@@ -125,31 +119,28 @@ void angle_move_servo(int N, uint32_t angle)
 
     angle = convert_to_raw(N, angle);
     raw_move_servo(N, angle);
+    
 }
 
 void increment_servo(int N){
     if(N == 0){
         azimuth_servo_angle += 1;
-        uint32_t raw_angle = convert_to_raw(N,azimuth_servo_angle);
-        raw_move_servo(N,raw_angle);
+        raw_move_servo(N,convert_to_raw(N,azimuth_servo_angle));
     }
     else if(N == 1){
         horizontal_servo_angle +=1;
-        uint32_t raw_angle = convert_to_raw(N,horizontal_servo_angle);
-        raw_move_servo(N, raw_angle);
+        raw_move_servo(N, convert_to_raw(N,horizontal_servo_angle));
     }
 }
 
 void decrement_servo(int N){
     if(N == 0){
         azimuth_servo_angle -= 1;
-        uint32_t raw_angle = convert_to_raw(N,azimuth_servo_angle);
-        raw_move_servo(N,raw_angle);
+        raw_move_servo(N,convert_to_raw(N,azimuth_servo_angle));
     }
     else if(N == 1){
         horizontal_servo_angle -= 1;
-        uint32_t raw_angle = convert_to_raw(N,horizontal_servo_angle);
-        raw_move_servo(N, raw_angle);
+        raw_move_servo(N, convert_to_raw(N,horizontal_servo_angle));
     }
 }
 
@@ -161,6 +152,8 @@ int16_t get_servo_angle(int N){
         // printk("Horizontal angle: %d\n", horizontal_servo_angle);
         return horizontal_servo_angle;}
 }
+
+
 
 
 

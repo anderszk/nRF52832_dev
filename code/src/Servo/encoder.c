@@ -8,7 +8,7 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 #define servo_horizontal_N 1
 #define servo_horizontal_pin 15
 #define servo_antenna_N 2
-#define servo_antenna_pin 16
+#define servo_antenna_pin 28
 
 #define pin_a_azimuth 26
 #define pin_b_azimuth 27
@@ -22,36 +22,11 @@ int16_t elevation_encoder_value = 0;
 int16_t azimuth_encoder_degrees;
 int16_t elevation_encoder_degrees;
 extern struct k_sem my_sem;
+extern struct k_sem servo_sem;
 
 static void qdec_nrfx_event_handler_azimuth(nrfx_qdec_event_t event){}
 static void qdec_nrfx_event_handler_elevation(nrfx_qdec_event_t event){}
 
-
-
-void update_encoder(int N){
-    int16_t acc;
-    int16_t accdbl;
-    nrfx_qdec_accumulators_read(&acc, &accdbl);
-    if (N < 1){
-        azimuth_encoder_value -= acc;
-        azimuth_encoder_degrees = azimuth_encoder_value/23;
-        printk("Azimuth enc: %d\n",  (azimuth_encoder_degrees));
-    }
-    else{
-        elevation_encoder_value += acc;
-        elevation_encoder_degrees = elevation_encoder_value/23;
-        // printk("Elevation enc: %d\n", elevation_encoder_degrees);
-        }
-}
-
-int16_t get_encoder(int N){//fake encoder verdier som gjenspeiler servo vinkelen så bra den kan
-    if(N < 1){
-        return azimuth_encoder_degrees;
-    }
-    else{
-        return elevation_encoder_degrees;
-    }
-}
 
 int init_encoder_azimuth(){
 
@@ -82,12 +57,6 @@ int init_encoder_azimuth(){
     nrfx_qdec_enable();
 
     return err;
-}
-
-void set_encoder(int value, int N){
-    if(N < 1){
-        azimuth_encoder_value = value;}
-    else{elevation_encoder_value = value;}
 }
 
 
@@ -124,17 +93,18 @@ int init_encoder_elevation(){
     return err;
 }
 
-
 int init_encoder_servos(){
 	int err = servo_init(servo_azimuth_N, servo_azimuth_pin);
     err = servo_init(servo_horizontal_N,servo_horizontal_pin);
     err = servo_init(servo_antenna_N, servo_antenna_pin);
     angle_move_servo(servo_azimuth_N, 0);
-    angle_move_servo(servo_horizontal_N, 40);
+    angle_move_servo(servo_horizontal_N, 20);
     angle_move_servo(servo_antenna_N, 0);
+ 
+    
     k_msleep(1000);
     azimuth_encoder_value = 0;
-    elevation_encoder_value = 0;
+    elevation_encoder_value = 460;
 
     IRQ_CONNECT(QDEC_IRQn, 4, nrfx_isr, nrfx_qdec_irq_handler, 0);
 	irq_enable(QDEC_IRQn);
@@ -143,57 +113,58 @@ int init_encoder_servos(){
 }
 
 
+void update_encoder(int N){
+    int16_t acc;
+    int16_t accdbl;
+    nrfx_qdec_accumulators_read(&acc, &accdbl);
+    if (N == 0){
+        azimuth_encoder_value -= acc;
+        azimuth_encoder_degrees = azimuth_encoder_value/23;
+        printk("Azimuth enc: %d\n",  (azimuth_encoder_degrees));
+    }
+    else if (N ==1){
+        elevation_encoder_value += acc;
+        elevation_encoder_degrees = elevation_encoder_value/23;
+        printk("Elevation enc: %d\n", elevation_encoder_degrees);
+    }
+    else{
+        printk("Error, wrong encoder number\n");
+        return;
+    }
+}
+
+
 void angle_slow_move(int N, uint32_t angle){
+    int size = 0;
+    
     if(N == 0){
         angle += 45;
-        if (angle >= 270){angle = 270;} 
-        else if(angle <= 0){angle = 0;}
-        // printk("Old angle: %d, new angle: %d\n", get_servo_angle(N), angle);
-        int size = angle-get_servo_angle(N);
-        // printk("size: %d\n", size);
-        if(size > 0){
-            printk("going up\n");
-            for(int i = 0; i < size; i++){
-                increment_servo(N);
-                k_msleep(90);
-                update_encoder(N);
-                }
-            }
-        else if(size < 0){
-            printk("going down:\n");
-            for(int i = 0; i > size; i--){
-                decrement_servo(N);
-                k_msleep(90);
-                update_encoder(N);
-                }
-            }
-        // int value = get_servo_angle(0) -45;
-        // printk("servo azimuth: %d\n", value);
+        if (angle >= 225){angle = 225;} 
+        else if(angle <= 45){angle = 45;}
+        size = angle-get_servo_angle(N);
+
     }
-    if(N == 1){
-        angle += 110;
+    else if(N == 1){
+        angle += 130;
         if (angle >= 200){angle = 200;} 
-        else if(angle <= 110){angle = 110;}
-        // printk("Old angle: %d, new angle: %d\n", get_servo_angle(N), angle);
-        int size = angle - get_servo_angle(N);
-        // printk("size: %d\n", size);
-        if(size > 0){
-            printk("going up\n");
-            for(int i = 0; i < size; i++){
-                increment_servo(N);
-                k_msleep(60);
-                update_encoder(N);
-                }
+        else if(angle <= 130){angle = 130;}
+        size = angle - get_servo_angle(N);
+
+    }
+    if(size > 0){
+        printk("going up, size: %d\n",size);
+        for(int i = 0; i < size; i++){
+            increment_servo(N);
+            k_msleep(60);
+            update_encoder(N);
             }
-        else if(size < 0){
-            printk("going down:\n");
-            for(int i = 0; i > size; i--){
-                decrement_servo(N);
-                k_msleep(60);
-                update_encoder(N);
-                }
         }
-        // int value = get_servo_angle(1) -45;
-        // printk("servo elevation: %d\n", value);
+    else if(size < 0){
+        printk("going down, size: %d\n", size);
+        for(int i = 0; i > size; i--){
+            decrement_servo(N);
+            k_msleep(60);
+            update_encoder(N);
+            }
     }
 }

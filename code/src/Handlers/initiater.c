@@ -4,6 +4,9 @@
 int initiate_modules(){
     int err;
    	err = configure_dk_buttons_leds();
+	if (err){
+		return err;
+	}
 	err = timer_init();
 	err = timer_start();
 	err = init_bluethooth_scan();
