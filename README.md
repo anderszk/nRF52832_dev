@@ -93,7 +93,7 @@ NOTE: We used Digi-Key Electronics as distributor for all our parts in the parts
 
 2. Clone the repo using:
    ```
-   $git clone https://github.com/anderszk/nRF52832_dev.git`
+   $git clone https://github.com/anderszk/nRF52832_dev.git
    ```
 3. Install SDK and Toolchain here:
    ```
