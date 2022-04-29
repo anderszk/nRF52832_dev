@@ -53,16 +53,37 @@ void angle_move_servo(int N, uint32_t angle);
  */
 void raw_move_servo(int N, uint32_t position);
 
-//Increment servo
-
-//Decrement servo
-
-//Sweep motion, speed.
 
 uint32_t sin_scaled(uint32_t input, uint32_t input_max, uint32_t output_min, uint32_t output_max);
 
+/**
+ * @brief 
+ * 
+ * @param N 
+ */
 void increment_servo(int N);
+
+/**
+ * @brief 
+ * 
+ * @param N 
+ */
 void decrement_servo(int N);
+
+/**
+ * @brief Get the servo angle object
+ * 
+ * @param N 
+ * @return int16_t 
+ */
 int16_t get_servo_angle(int N);
+
+/**
+ * @brief 
+ * 
+ * @param N 
+ * @param angle 
+ */
 void angle_slow_move(int N, uint32_t angle);
-void set_servo_angle(int N, uint32_t angle);
+
+

@@ -1,10 +1,9 @@
 #include "misc.h"
 
 static int _laser_pin;
-
 extern const struct device *dev;
 
-void laser_init(int laser_pin)
+int laser_init(int laser_pin)
 {
     //Dev er allerede definert så vi gjør den heller global
     // dev = device_get_binding("GPIO_0");
@@ -13,12 +12,17 @@ void laser_init(int laser_pin)
     //     printk("Laser init failed.\n");
     //     return;
     // }
-
-    gpio_pin_configure(dev, laser_pin, GPIO_OUTPUT_LOW);
+    int err;
+    err = gpio_pin_configure(dev, laser_pin, GPIO_OUTPUT_HIGH);
+    if (err){
+		printk("Could not configure laser (err: %d).", err);
+		return err;
+	}
 
     _laser_pin = laser_pin;
 
-    printk("Laser init successfull.");
+    printk("Laser init successfull.\n");
+    return err;
 }
 
 void laser_toggle()

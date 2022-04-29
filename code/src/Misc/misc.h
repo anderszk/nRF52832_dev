@@ -9,7 +9,7 @@
  * 
  * @param laser_pin Pin connected to laser +5v (nRF52 not compatible with 5v on gpio).
  */
-void laser_init();
+int laser_init();
 
 /**
  * @brief Toggles laser pointer on or off

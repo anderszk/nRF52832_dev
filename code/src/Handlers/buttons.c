@@ -1,6 +1,5 @@
 #include "buttons.h"
-#define LOG_MODULE_NAME BUTTONS_LEDS
-LOG_MODULE_REGISTER(LOG_MODULE_NAME);
+
 
 
 
@@ -32,7 +31,7 @@ void button_handler(uint32_t button_state, uint32_t has_changed){
 				break;
 			case DK_BTN3_MSK:
 				button_pressed = 3;
-                printk("angle: %d",get_servo_angle(N));
+                printk("Angle: %d",get_servo_angle(N));
 				break;
 			case DK_BTN4_MSK:
 				k_sem_give(&my_sem);
@@ -49,7 +48,7 @@ void button_handler(uint32_t button_state, uint32_t has_changed){
 			default:
 				break;
 		}
-		printk("Button %d pressed\n", button_pressed);
+		printk("Button %d pressed.\n", button_pressed);
 		
 
 	}
@@ -58,13 +57,16 @@ void button_handler(uint32_t button_state, uint32_t has_changed){
 int configure_dk_buttons_leds(){
 	int err = dk_leds_init();
 	if(err){
-		LOG_ERR("Could not init LEDS(err %d",err);
+		printk("Could not init LEDS (error: %d).",err);
+		return err;
 	}
 
 	err = dk_buttons_init(button_handler);
 	if(err){
-		LOG_ERR("Could not init BUTTONS(err %d", err);
+		printk("Could not init BUTTONS (error: %d).", err);
+		return err;
 	}
+	printk("Buttons and leds initiated.\n");
 	return err;
 }
     

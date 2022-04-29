@@ -3,5 +3,10 @@
 #include "search.h"
 #include "misc.h"
 
-
+/**
+ * @brief Configures buttons and leds
+ * This function initiates the four leds and a button_handler which are connected to the buttons
+ * on the DK. 
+ * @return int 0 when successful
+ */
 int configure_dk_buttons_leds();

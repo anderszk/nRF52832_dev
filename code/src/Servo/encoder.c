@@ -1,7 +1,6 @@
 #include "encoder.h"
 
-#define LOG_MODULE_NAME ENCODER
-LOG_MODULE_REGISTER(LOG_MODULE_NAME);
+
 
 #define servo_azimuth_N 0
 #define servo_azimuth_pin 13
@@ -49,12 +48,15 @@ int init_encoder_azimuth(){
     err = nrfx_qdec_init(&qdec_config_azimuth, qdec_nrfx_event_handler_azimuth);
 	if (err == NRFX_SUCCESS) {
 		printk("Azimuth QDEC initialization was successful.\n");
+        nrfx_qdec_enable();
+        return err;
+
 	}
     else if (err == NRFX_ERROR_INVALID_STATE) {
-        printk("Azimuth QDEC was already initialized.");
+        printk("Azimuth QDEC was already initialized.\n");
+        return err;
     }
 	else {printk("Azimuth QDEC initialization failed.\n");}
-    nrfx_qdec_enable();
 
     return err;
 }
@@ -83,22 +85,38 @@ int init_encoder_elevation(){
     err = nrfx_qdec_init(&qdec_config_elevation, qdec_nrfx_event_handler_elevation);
 	if (err == NRFX_SUCCESS) {
 		printk("Elevation QDEC initialization was successful.\n");
+        nrfx_qdec_enable();
+        return err;
+
 	}
     else if (err == NRFX_ERROR_INVALID_STATE) {
-        printk("Elevation QDEC was already initialized.");
+        printk("Elevation QDEC was already initialized.\n");
+        return err;
     }
 	else {printk("Elevation QDEC initialization failed.\n");}
-    nrfx_qdec_enable();
 
     return err;
 }
 
 int init_encoder_servos(){
-	int err = servo_init(servo_azimuth_N, servo_azimuth_pin);
+	int err;
+    err = servo_init(servo_azimuth_N, servo_azimuth_pin);
+    if (err){
+		printk("Could not Azimuth servomotor (err:%d).\n", err);
+		return err;
+	}
     err = servo_init(servo_horizontal_N,servo_horizontal_pin);
+    if (err){
+		printk("Could not Elevation servomotor (err:%d).\n", err);
+		return err;
+	}
     err = servo_init(servo_antenna_N, servo_antenna_pin);
+    if (err){
+		printk("Could not configure Antenna servomotor (err:%d).\n", err);
+		return err;
+	}
     angle_move_servo(servo_azimuth_N, 0);
-    angle_move_servo(servo_horizontal_N, 23);
+    angle_move_servo(servo_horizontal_N, 20);
     angle_move_servo(servo_antenna_N, 0);
  
     
@@ -120,15 +138,15 @@ void update_encoder(int N){
     if (N == 0){
         azimuth_encoder_value -= acc;
         azimuth_encoder_degrees = azimuth_encoder_value/23;
-        printk("Azimuth enc: %d\n",  (azimuth_encoder_degrees));
+        // printk("Azimuth enc: %d.\n",  (azimuth_encoder_degrees));
     }
     else if (N ==1){
         elevation_encoder_value += acc;
         elevation_encoder_degrees = elevation_encoder_value/23;
-        printk("Elevation enc: %d\n", elevation_encoder_degrees);
+        // printk("Elevation enc: %d.\n", elevation_encoder_degrees);
     }
     else{
-        printk("Error, wrong encoder number\n");
+        printk("Error, wrong encoder number.\n");
         return;
     }
 }
@@ -152,7 +170,7 @@ void angle_slow_move(int N, uint32_t angle){
 
     }
     if(size > 0){
-        printk("going up, size: %d\n",size);
+        // printk("going up, size: %d\n",size);
         for(int i = 0; i < size; i++){
             increment_servo(N);
             k_msleep(60);
@@ -160,7 +178,7 @@ void angle_slow_move(int N, uint32_t angle){
             }
         }
     else if(size < 0){
-        printk("going down, size: %d\n", size);
+        // printk("going down, size: %d\n", size);
         for(int i = 0; i > size; i--){
             decrement_servo(N);
             k_msleep(60);

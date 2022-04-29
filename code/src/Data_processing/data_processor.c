@@ -1,28 +1,16 @@
 #include "data_processor.h"
 
-#define LOG_MODULE_NAME DATA_PROCESSOR
-#define ZIGMA_ZERO_VALUE -45
 #define MIN_VALID_RSSI -90
 #define MAX_VALID_RSSI -10
 
-LOG_MODULE_REGISTER(LOG_MODULE_NAME);
-
 int16_t average_counter = 1;
-
 int16_t data_delta[10];
 int16_t data_zigma[10];
 
-void send_data_delta(int16_t rssi, int index){
-    data_delta[index] = rssi;
+void send_data(int16_t rssi, int index, int state){
+    if(state == 1){data_zigma[index] = rssi;}
+    else{data_delta[index] = rssi;}
 }
-void send_data_zigma(int16_t rssi, int index){
-    data_zigma[index] = rssi;
-}
-
-void set_average_counter(int16_t value){
-    average_counter = value;
-}
-
 
 int16_t get_average(int16_t *list){
     int16_t average = 0;
@@ -30,6 +18,12 @@ int16_t get_average(int16_t *list){
         average += list[i];
     }
     return  average/average_counter;
+}
+
+void set_average_counter(int16_t value){
+    if(value > 10){value = 10;}
+    else if(value < 1){value = 1;}
+    average_counter = value;
 }
 
 
@@ -69,31 +63,35 @@ void update_matrix(matrix_x3 *data, int16_t *n){
     }
 }
 
-bool zero_point_validater(int16_t value_zigma, int16_t value_delta){
+bool zero_point_validater(int16_t value_zigma, int16_t value_delta, int16_t ZIGMA_ZERO_VALUE){
 
     return value_zigma >= ZIGMA_ZERO_VALUE && value_delta < value_zigma;
 
 }
 
 int find_zero_point(matrix_x3 validated_values[], int n){
-    printk("size: %d\n", n);
     int zero_point_index = 0;
+    bool first_zero = false;
+    int16_t ZIGMA_ZERO_VALUE;
 
     if(n == 1){return 0;}
-    //Se om denne funksjonen virker:
-    // if(validated_values[0].delta <= validated_values[1].delta && zero_point_validater(validated_values[0].zigma, validated_values[0].delta)){
-    //     zero_point_index = 0;
-    // }
-    // if(validated_values[n-1].delta <= validated_values[n-2].zigma && zero_point_validater(validated_values[n-1].zigma, validated_values[n-1].delta)){
-    //     zero_point_index = n-1;
-    // }
 
-    for(int i = 1; i < n-1; i++){
+    ZIGMA_ZERO_VALUE = find_zigma_zero_value(validated_values, n);
+
+    for(int i = 0; i < n-1; i++){
+        if(!first_zero && zero_point_validater(validated_values[i].zigma,validated_values[i].delta, ZIGMA_ZERO_VALUE)){
+            zero_point_index = i;
+            first_zero = true;
+            printk("First zero at index %d\n", i);
+        }
+    }
+
+    for(int i = (zero_point_index + 1); i < n-1; i++){
         // if(validated_values[i].delta <= validated_values[i-1].delta && validated_values[i].delta <= validated_values[i+1].delta){
-            if(validated_values[i].delta <= validated_values[zero_point_index].delta && zero_point_validater(validated_values[i].zigma, validated_values[i].delta)){
-                printk("Old index: %d, value %d\n", validated_values[zero_point_index].encoder, validated_values[zero_point_index].delta);
+            if(validated_values[i].delta <= validated_values[zero_point_index].delta && zero_point_validater(validated_values[i].zigma, validated_values[i].delta, ZIGMA_ZERO_VALUE)){
+                // printk("Old index: %d, value %d\n", validated_values[zero_point_index].encoder, validated_values[zero_point_index].delta);
                 zero_point_index = i;
-                printk("New index: %d, value %d\n", validated_values[zero_point_index].encoder, validated_values[zero_point_index].delta);
+                // printk("New index: %d, value %d\n", validated_values[zero_point_index].encoder, validated_values[zero_point_index].delta);
             // }
         }
     }
@@ -101,6 +99,16 @@ int find_zero_point(matrix_x3 validated_values[], int n){
     return zero_point_index;
 
 }
+
+int16_t find_zigma_zero_value(matrix_x3 values[], int n){
+    int16_t ZIGMA_ZERO_VALUE = -90;
+    for (int i = 0; i < n-1; i++){
+        if(values[i].zigma > ZIGMA_ZERO_VALUE){ZIGMA_ZERO_VALUE = values[i].zigma;}
+    }
+    printk("New zigma zero value validator: %d.\n",ZIGMA_ZERO_VALUE);
+    return ZIGMA_ZERO_VALUE - 3;
+}
+
 
 
 

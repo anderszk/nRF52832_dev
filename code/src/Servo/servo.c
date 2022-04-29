@@ -1,7 +1,5 @@
 #include "servo.h"
-#define LOG_MODULE_NAME SERVO
 
-LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 //Set servo period in Hz
 #define SERVO_PERIOD 50
@@ -33,15 +31,14 @@ int timer_init()
     NRF_TIMER3->MODE                    = TIMER_MODE_MODE_Timer << TIMER_MODE_MODE_Pos;
     NRF_TIMER3->CC[TIMER_RELOAD_CC_NUM] = TIMER_RELOAD;
 
-    LOG_INF("Timer initialized.");
+    printk("Timer initialized.\n");
     return 0 ;
 }
 
 int timer_start()
 {
     NRF_TIMER3->TASKS_START = 1;
-
-    LOG_INF("Timer started.");
+    printk("Timer started.\n");
     return 0;
 }
 
@@ -69,7 +66,7 @@ int servo_init(uint32_t N, int servo_pin)
     }
     NRF_PPI->CHENSET                      = (1 << pwmN_ppi_ch_a[N]) | (1 << pwmN_ppi_ch_b[N]);
     
-    LOG_INF("Initializing servo %u on pin %i success!\n", N, servo_pin);
+    printk("Initializing servo %u on pin %i success!\n", N, servo_pin);
     return 0;
 }
 
@@ -87,7 +84,7 @@ void raw_move_servo(int N, uint32_t position)
 {
     if (N > 3)
     {
-        LOG_INF("Invalid N, %u > 3", N);
+        printk("Invalid N, %u > 3\n", N);
         return;
     }
     position = (position <= 0) ? 1 : (position >= TIMER_RELOAD) ? TIMER_RELOAD - 1 : position;

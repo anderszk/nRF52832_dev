@@ -1,6 +1,6 @@
 #include "kalman_filter.h"
 
-int8_t KALMAN(int8_t U){
+int8_t KALMAN_DELTA(int8_t U){
     static int delay_start = 0;
     U = (double)U;
     //constants (static)
@@ -26,7 +26,7 @@ int8_t KALMAN(int8_t U){
     else{return U_hat;}
 }
 
-int8_t KALMAN_ZIG(int8_t U){
+int8_t KALMAN_ZIGMA(int8_t U){
     static int delay_start = 0;
     U = (double)U;
     //constants (static)
