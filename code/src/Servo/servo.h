@@ -57,33 +57,29 @@ void raw_move_servo(int N, uint32_t position);
 uint32_t sin_scaled(uint32_t input, uint32_t input_max, uint32_t output_min, uint32_t output_max);
 
 /**
- * @brief 
- * 
- * @param N 
+ * @brief Increments servo angle
+ * Depending on the parameter N the function will update the servomotor angle and
+ * use the function "raw_move_servo" and "convert_to_raw" to increment the servomotor angle
+ * @param N 0 for azimuth, 1 for elevation
  */
 void increment_servo(int N);
 
 /**
  * @brief 
- * 
- * @param N 
+ * Depending on the parameter N the function will update the servomotor angle and
+ * use the function "raw_move_servo" and "convert_to_raw" to decrement the servomotor angle
+ * @param N 0 for azimuth, 1 for elevation
  */
 void decrement_servo(int N);
 
 /**
  * @brief Get the servo angle object
- * 
- * @param N 
- * @return int16_t 
+ * Depending on the parameter N the function will return either the servomotor angle
+ * for either azimuth or elevation
+ * @param N 0 for azimuth, 1 for elevation
+ * @return int16_t Servomotor angle
  */
 int16_t get_servo_angle(int N);
 
-/**
- * @brief 
- * 
- * @param N 
- * @param angle 
- */
-void angle_slow_move(int N, uint32_t angle);
 
 
