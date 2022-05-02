@@ -11,8 +11,8 @@
 
 #define pin_a_azimuth 26
 #define pin_b_azimuth 27
-#define pin_a_elevation 3
-#define pin_b_elevation 4
+#define pin_a_elevation 30
+#define pin_b_elevation 31
 
 
 
