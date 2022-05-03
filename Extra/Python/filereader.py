@@ -10,7 +10,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.pylab as pl 
 
-datafile = "file1.txt" #temp
 #path = r"C:\Users\khuon\Documents\logs\"
 instruction = """
 Press one of the following numbers to plot a chart:\n
@@ -20,7 +19,7 @@ Press one of the following numbers to plot a chart:\n
 (4) Polar Delta
 (5) To exit
 
-Enter your choice (1-4) here: """
+Enter your choice (1-5) here: """
 
 
 
@@ -34,7 +33,7 @@ def writedatatofile() -> None:
             f.write(str(string))
 
 
-def read_data(file) -> list:
+def read_data_sweep(file) -> list:
     """Reads the data from the files and returns a list containing of 3 sub-lists.
 
         Parameters
@@ -56,6 +55,25 @@ def read_data(file) -> list:
         sigma.append(float(data[1]))
         delta.append(float(data[2]))
     return [encoder, sigma, delta]
+
+
+def read_data_nulls(file) -> list:
+    """readsnull
+
+        Parameters
+        ----------
+        file : file, datafile
+
+        Returns
+        ----------
+        data : list, list of data
+    """
+    data = []
+    for line in file:
+        data.append(line.strip("\n").split(","))
+    if len(data) != 18:
+        raise IndexError("Invalid data in list, please upload the file again")
+    return [data[0:3],data[3:]]
 
 
 def plot_db(data: list, mode: str) -> None:
@@ -109,6 +127,8 @@ def plot_polar(data: list, mode: str) -> None:
     plt.show()
 
 
+
+
 def plotprogram(data: list, mode: str) -> None:
     """The program that choses the type of diagram and loops the choices for
         the user.
@@ -137,6 +157,14 @@ def plotprogram(data: list, mode: str) -> None:
     else:
         raise ValueError("Invalid type, please try with a number between 1-5")
 
+def filereader(file, type):
+    if type in ["s","S"]:
+        return read_data_sweep(file)
+    elif type in ["n","N"]:
+        return read_data_nulls(file)
+    else: 
+        print("invalid mode, please try again")
+        filereader(file)
 
 """ 
 TODO:
@@ -148,13 +176,20 @@ if __name__ == "__main__":
     #writedatatofile()
     #datafile = path+input("Enter filename here (eg. file.txt): ")
     #with open(os.path.join(os.path.dirname(__file__), datafile), 'r') as f:
+
     file = input("Enter filename here: ")
-    with open(file, "r") as f: #temp
-        readings = read_data(f)
-        try:
-            mode = input(instruction)
-            plotprogram(readings, mode)
-        except ValueError as e:
-            print(e)
+    datafile = "logs/"+file
+    try:
+        with open(datafile, "r") as f: #temp
+            type = input("Is this plot for (s)weeps or (n)ulls?: ")
+            readings = filereader(f, type)
+            print(len(readings))
+            if type == "s":
+                mode = input(instruction)
+                plotprogram(readings, mode)
+            else: print(readings)
+    except ValueError as e:
+        print(e)
+
 
     
