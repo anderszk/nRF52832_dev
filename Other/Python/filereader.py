@@ -23,14 +23,6 @@ Enter your choice (1-5) here: """
 
 
 
-def writedatatofile() -> None:
-    with open(datafile, "w") as f:
-        for i in range(0,90):
-            string = "{},{},{}\n".format(i, -20-i ,i) 
-            f.write(str(string))
-        for i in range(90,180):
-            string = "{},{},{}\n".format(i, -160+i, i)
-            f.write(str(string))
 
 
 def read_data_sweep(file) -> list:
@@ -74,6 +66,9 @@ def read_data_nulls(file) -> list:
     if len(data) != 18:
         raise IndexError("Invalid data in list, please upload the file again")
     return [data[0:3],data[3:]]
+
+
+
 
 
 def plot_db(data: list, mode: str) -> None:
@@ -129,6 +124,7 @@ def plot_polar(data: list, mode: str) -> None:
 
 
 
+
 def plotprogram(data: list, mode: str) -> None:
     """The program that choses the type of diagram and loops the choices for
         the user.
@@ -166,10 +162,8 @@ def filereader(file, type):
         print("invalid mode, please try again")
         filereader(file)
 
-""" 
-TODO:
-    -Legge til funksjon som plotter nullpunktene
-"""
+
+
 
 
 if __name__ == "__main__":
