@@ -3,11 +3,11 @@
 
 
 #define servo_azimuth_N 0
-#define servo_azimuth_pin 13
+#define servo_azimuth_pin 2
 #define servo_horizontal_N 1
-#define servo_horizontal_pin 15
+#define servo_horizontal_pin 3
 #define servo_antenna_N 2
-#define servo_antenna_pin 28
+#define servo_antenna_pin 4
 
 #define pin_a_azimuth 26
 #define pin_b_azimuth 27
@@ -116,18 +116,17 @@ int init_encoder_servos(){
 		return err;
 	}
     angle_move_servo(servo_azimuth_N, 0);
-    angle_move_servo(servo_horizontal_N, 20);
-    angle_move_servo(servo_antenna_N, 0);
+    angle_move_servo(servo_horizontal_N,0);
+    angle_move_servo(servo_antenna_N, 90);
  
     
     k_msleep(1000);
     azimuth_encoder_value = 0;
-    elevation_encoder_value = 460;
+    elevation_encoder_value = 0;
 
     IRQ_CONNECT(QDEC_IRQn, 4, nrfx_isr, nrfx_qdec_irq_handler, 0);
 	irq_enable(QDEC_IRQn);
 
-    return err;
 }
 
 

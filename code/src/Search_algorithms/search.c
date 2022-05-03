@@ -8,8 +8,8 @@
 #define MAX_READINGS 270
 #define AZIMUTH_DEGREES 180
 #define ELEVATION_DEGREES 90
-#define SEARCH_PLANES 1
-
+#define SEARCH_PLANES 2
+#define FINE_ACTIVATE 1
 
 
 extern struct k_sem my_sem;
@@ -59,10 +59,10 @@ void validate_servo_zero_moved(int N, uint32_t zero_point_servo_angle){
 }
 
 zeros fine_search(zeros enc_values){
-
+    if(FINE_ACTIVATE){
     zeros fine_zeros;
-    angle_move_servo(2,0);
-    k_msleep(1000);
+    angle_move_servo(2,90);
+    k_msleep(2000);
     init_encoder_azimuth();
     printk("Starting fine search in Azimuth.\n");
     k_thread_resume(my_tid_0);
@@ -74,8 +74,8 @@ zeros fine_search(zeros enc_values){
     
     if(SEARCH_PLANES > 1){
         k_msleep(1000);
-        angle_move_servo(2,90);
-        k_msleep(1000);
+        angle_move_servo(2,0);
+        k_msleep(2000);
 
         printk("Starting fine search in Elevation.\n");
         init_encoder_elevation();
@@ -87,10 +87,13 @@ zeros fine_search(zeros enc_values){
         k_thread_suspend(my_tid_1);
 
         k_msleep(1000);
-        angle_move_servo(2,0);
+        angle_move_servo(2,90);
+        k_msleep(2000);
     }
     printk("Fine search finished.\n");
     return fine_zeros;
+    }
+    return enc_values;
 }
 
 
@@ -107,6 +110,7 @@ zeros coarse_search(){
 
     printk("Starting coarse sweep in Azimuth.\n");
 
+  
     k_thread_start(my_tid_0);
 	sweep_search(0, min_encoder_search_azimuth, max_encoder_search_azimuth,increment);
 	get_readings(&azimuth_readings, &size);
@@ -117,6 +121,7 @@ zeros coarse_search(){
     validate_servo_zero_moved(0, azimuth_thread_servo_angle);
     k_thread_suspend(my_tid_0);
     printk("Coarse sweep in Azimuth finished\n");
+    
 
 
     // for(int i = 0; i < size; i++){
@@ -125,8 +130,8 @@ zeros coarse_search(){
 
     if (SEARCH_PLANES > 1){
         k_msleep(1000);
-        angle_move_servo(2, 90);
-        k_msleep(1000);
+        angle_move_servo(2, 0);
+        k_msleep(2000);
 
         init_encoder_elevation();
         set_average_counter(3);
@@ -147,12 +152,12 @@ zeros coarse_search(){
 
 
         for(int i = 0; i < size; i++){
-            printk("Encoder: %d,  delta: %d, zigma: %d \n", elevation_readings[i].encoder, elevation_readings[i].delta, elevation_readings[i].zigma);
+            printk("%d,%d,%d \n", elevation_readings[i].encoder, elevation_readings[i].zigma, elevation_readings[i].delta);
         }
 
         k_msleep(1000);
-        angle_move_servo(2, 0);
-        k_msleep(1000);
+        angle_move_servo(2, 90);
+        k_msleep(2000);
     }
     printk("Coarse search finished.\n");
 
@@ -178,7 +183,7 @@ void sweep_search(int state, int16_t min_encoder_search, int16_t max_encoder_sea
         readings[index].delta = buffer_data.delta;
         readings[index].zigma = buffer_data.zigma;
 
-        printk("Encoder: %d, Delta: %d, Zigma %d, i: %d: \n",readings[index].encoder, readings[index].delta, readings[index].zigma, index);
+        printk("%d,%d,%d\n",readings[index].encoder, readings[index].zigma, readings[index].delta);
         index+=1;
     }
     k_sem_give(&my_sem);

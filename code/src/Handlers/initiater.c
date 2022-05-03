@@ -33,13 +33,13 @@ int initiate_modules(){
 		printk("Error while configuring Azimuth encoder (error: %d).\n", err);
 		return err;
 	}
-	err = laser_init(29);
+	err = laser_init(28);
 	if (err){
 		printk("Error while configuring laser (error: %d).\n", err);
 		return err;
 	}
 	set_average_counter(1);	
 	laser_set(1);
-	
+
     return err;
 }

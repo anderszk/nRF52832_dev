@@ -1,5 +1,5 @@
 #include "observer.h"
-#define switch_pin 14
+#define switch_pin 29
 
 extern int16_t average_counter;
 
@@ -86,7 +86,7 @@ int init_bluethooth_scan(){
 		printk("Bluetooth init failed (error %d).\n", err);
 		return err;
 	}
-    err = add_filter_accept_list_from_string("C8:4A:E6:23:F5:13", "(random)");
+    err = add_filter_accept_list_from_string("E7:9E:11:9E:33:EE", "(random)");
 	if (err){
 		printk("Could not add to acceptlist (error: %d).", err);
 		return err;

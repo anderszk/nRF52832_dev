@@ -1,7 +1,7 @@
 #include "data_processor.h"
 
 #define MIN_VALID_RSSI -90
-#define MAX_VALID_RSSI -10
+#define MAX_VALID_RSSI -25
 
 int16_t average_counter = 1;
 int16_t data_delta[10];
@@ -102,7 +102,7 @@ int find_zero_point(matrix_x3 validated_values[], int n){
 
 int16_t find_zigma_zero_value(matrix_x3 values[], int n){
     int16_t ZIGMA_ZERO_VALUE = -90;
-    for (int i = 0; i < n-1; i++){
+    for (int i = 1; i < n-1; i++){
         if(values[i].zigma > ZIGMA_ZERO_VALUE){ZIGMA_ZERO_VALUE = values[i].zigma;}
     }
     printk("New zigma zero value validator: %d.\n",ZIGMA_ZERO_VALUE);
