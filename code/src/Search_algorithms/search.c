@@ -8,12 +8,10 @@
 #define MAX_READINGS 270
 #define AZIMUTH_DEGREES 180
 #define ELEVATION_DEGREES 90
-#define SEARCH_PLANES 2
-#define FINE_ACTIVATE 1
+
 
 
 extern struct k_sem my_sem;
-extern struct k_sem servo_sem;
 matrix_x3 readings[MAX_READINGS];
 matrix_x3 azimuth_readings[AZIMUTH_DEGREES];
 matrix_x3 elevation_readings[ELEVATION_DEGREES];
@@ -59,38 +57,39 @@ void validate_servo_zero_moved(int N, uint32_t zero_point_servo_angle){
 }
 
 zeros fine_search(zeros enc_values){
-    if(FINE_ACTIVATE){
     zeros fine_zeros;
-    angle_move_servo(2,90);
-    k_msleep(2000);
-    init_encoder_azimuth();
-    printk("Starting fine search in Azimuth.\n");
-    k_thread_resume(my_tid_0);
-	fine_zeros.azimuth = fine_sweeper(0,10,10,20,enc_values.azimuth);
-    printk("Moving robot to zero-point, encoder value: %d.\n", fine_zeros.azimuth);
-    azimuth_thread_servo_angle = fine_zeros.azimuth;
-    validate_servo_zero_moved(0, azimuth_thread_servo_angle);
-    k_thread_suspend(my_tid_0);
-    
-    if(SEARCH_PLANES > 1){
-        k_msleep(1000);
-        angle_move_servo(2,0);
-        k_msleep(2000);
+    if(FINE_ACTIVATE){
+        if(SEARCH_AZIMUTH){
+            angle_move_servo(2,90);
+            k_msleep(2000);
+            init_encoder_azimuth();
+            printk("Starting fine search in Azimuth.\n");
+            k_thread_resume(my_tid_0);
+            fine_zeros.azimuth = fine_sweeper(0,10,10,20,enc_values.azimuth);
+            printk("Moving robot to zero-point, encoder value: %d.\n", fine_zeros.azimuth);
+            azimuth_thread_servo_angle = fine_zeros.azimuth;
+            validate_servo_zero_moved(0, azimuth_thread_servo_angle);
+            k_thread_suspend(my_tid_0);
+        }
+        if(SEARCH_ELEVATION){
+            k_msleep(1000);
+            angle_move_servo(2,0);
+            k_msleep(2000);
 
-        printk("Starting fine search in Elevation.\n");
-        init_encoder_elevation();
-        k_thread_resume(my_tid_1);
-        fine_zeros.elevation = fine_sweeper(1, 10, 10, 20, enc_values.elevation);
-        printk("Moving robot to zero-point, encoder value: %d.\n", fine_zeros.elevation);
-        elevation_thread_servo_angle = fine_zeros.elevation;
-        validate_servo_zero_moved(1, elevation_thread_servo_angle);
-        k_thread_suspend(my_tid_1);
+            printk("Starting fine search in Elevation.\n");
+            init_encoder_elevation();
+            k_thread_resume(my_tid_1);
+            fine_zeros.elevation = fine_sweeper(1, 10, 10, 20, enc_values.elevation);
+            printk("Moving robot to zero-point, encoder value: %d.\n", fine_zeros.elevation);
+            elevation_thread_servo_angle = fine_zeros.elevation;
+            validate_servo_zero_moved(1, elevation_thread_servo_angle);
+            k_thread_suspend(my_tid_1);
 
-        k_msleep(1000);
-        angle_move_servo(2,90);
-        k_msleep(2000);
-    }
-    printk("Fine search finished.\n");
+            k_msleep(1000);
+            angle_move_servo(2,90);
+            k_msleep(2000);
+        }
+        printk("Fine search finished.\n");
     return fine_zeros;
     }
     return enc_values;
@@ -110,25 +109,25 @@ zeros coarse_search(){
 
     printk("Starting coarse sweep in Azimuth.\n");
 
-  
-    k_thread_start(my_tid_0);
-	sweep_search(0, min_encoder_search_azimuth, max_encoder_search_azimuth,increment);
-	get_readings(&azimuth_readings, &size);
-	zero_point_index_azimuth = find_zero_point(azimuth_readings, size);
-    coarse_zeros.azimuth = azimuth_readings[zero_point_index_azimuth].encoder;
-    printk("Moving robot to zero point, encoder value: %d.\n", coarse_zeros.azimuth);
-	azimuth_thread_servo_angle = coarse_zeros.azimuth;
-    validate_servo_zero_moved(0, azimuth_thread_servo_angle);
-    k_thread_suspend(my_tid_0);
-    printk("Coarse sweep in Azimuth finished\n");
-    
+    if(SEARCH_AZIMUTH){
+        k_thread_start(my_tid_0);
+        sweep_search(0, min_encoder_search_azimuth, max_encoder_search_azimuth,increment);
+        get_readings(&azimuth_readings, &size);
+        zero_point_index_azimuth = find_zero_point(azimuth_readings, size);
+        coarse_zeros.azimuth = azimuth_readings[zero_point_index_azimuth].encoder;
+        printk("Moving robot to zero point, encoder value: %d.\n", coarse_zeros.azimuth);
+        azimuth_thread_servo_angle = coarse_zeros.azimuth;
+        validate_servo_zero_moved(0, azimuth_thread_servo_angle);
+        k_thread_suspend(my_tid_0);
+        printk("Coarse sweep in Azimuth finished\n");
+    }
 
 
     // for(int i = 0; i < size; i++){
 	// 	printk("Encoder: %d,  delta: %d, zigma: %d \n", azimuth_readings[i].encoder, azimuth_readings[i].delta, azimuth_readings[i].zigma);
 	// }
 
-    if (SEARCH_PLANES > 1){
+    if (SEARCH_ELEVATION){
         k_msleep(1000);
         angle_move_servo(2, 0);
         k_msleep(2000);

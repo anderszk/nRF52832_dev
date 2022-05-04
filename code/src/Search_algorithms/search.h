@@ -1,4 +1,21 @@
 #include "observer.h"
+/**
+ * @brief Activates search in azimuth
+ * 0 to deactivate search in azimuth, 1 to activate search in azimuth
+ * 
+ */
+#define SEARCH_AZIMUTH 1
+/**
+ * @brief Activates serach in elevation
+ * 0 to deactivate search in elevation, 1 to activate search in elevation
+ */
+#define SEARCH_ELEVATION 1
+/**
+ * @brief Activates fine search
+ * 0 to deactivate fine search, 1 to activate fine search
+ */
+#define FINE_ACTIVATE 1
+
 
 /**
  * @brief Search and stores RSSI values within given area

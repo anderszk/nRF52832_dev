@@ -1,4 +1,3 @@
-// #include "button_leds.h"
 #include "buttons.h"
 /**
  * @brief Initiate necessary modules

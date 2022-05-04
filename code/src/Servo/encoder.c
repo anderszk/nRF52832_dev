@@ -4,8 +4,8 @@
 
 #define servo_azimuth_N 0
 #define servo_azimuth_pin 2
-#define servo_horizontal_N 1
-#define servo_horizontal_pin 3
+#define servo_elevationl_N 1
+#define servo_elevation_pin 3
 #define servo_antenna_N 2
 #define servo_antenna_pin 4
 
@@ -14,14 +14,14 @@
 #define pin_a_elevation 30
 #define pin_b_elevation 31
 
-
+#define starting_angle_azimuth 0
+#define starting_angle_elevation 0
 
 int16_t azimuth_encoder_value = 0;
 int16_t elevation_encoder_value = 0;
 int16_t azimuth_encoder_degrees;
 int16_t elevation_encoder_degrees;
 extern struct k_sem my_sem;
-extern struct k_sem servo_sem;
 
 static void qdec_nrfx_event_handler_azimuth(nrfx_qdec_event_t event){}
 static void qdec_nrfx_event_handler_elevation(nrfx_qdec_event_t event){}
@@ -105,7 +105,7 @@ int init_encoder_servos(){
 		printk("Could not Azimuth servomotor (err:%d).\n", err);
 		return err;
 	}
-    err = servo_init(servo_horizontal_N,servo_horizontal_pin);
+    err = servo_init(servo_elevationl_N,servo_elevation_pin);
     if (err){
 		printk("Could not Elevation servomotor (err:%d).\n", err);
 		return err;
@@ -115,14 +115,14 @@ int init_encoder_servos(){
 		printk("Could not configure Antenna servomotor (err:%d).\n", err);
 		return err;
 	}
-    angle_move_servo(servo_azimuth_N, 0);
-    angle_move_servo(servo_horizontal_N,0);
+    angle_move_servo(servo_azimuth_N, starting_angle_azimuth);
+    angle_move_servo(servo_elevationl_N,starting_angle_elevation);
     angle_move_servo(servo_antenna_N, 90);
- 
+    
     
     k_msleep(1000);
-    azimuth_encoder_value = 0;
-    elevation_encoder_value = 0;
+    azimuth_encoder_value = starting_angle_azimuth * 23;
+    elevation_encoder_value = starting_angle_elevation * 23;
 
     IRQ_CONNECT(QDEC_IRQn, 4, nrfx_isr, nrfx_qdec_irq_handler, 0);
 	irq_enable(QDEC_IRQn);
@@ -185,7 +185,7 @@ void angle_slow_move(int N, uint32_t angle){
             }
     }
 }
-int16_t get_encoder(int N){//fake encoder verdier som gjenspeiler servo vinkelen så bra den kan
+int16_t get_encoder(int N){
     if(N < 1){
         return azimuth_encoder_degrees;
     }
