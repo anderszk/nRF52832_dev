@@ -9,11 +9,12 @@ FILE(GLOB app_sources src/*.c)
 target_sources(app PRIVATE ${app_sources}
 src/Data_processing/data_processor.c;
 src/Handlers/initiater.c;
-src/Handlers/kalman_filter.c;
 src/Handlers/observer.c;
 src/Search_algorithms/search.c;
 src/Servo/encoder.c;
-src/Servo/servo.c
+src/Servo/servo.c;
+src/Handlers/buttons.c;
+src/Misc/laser.c
 )
 
 zephyr_library_include_directories(
@@ -21,7 +22,8 @@ zephyr_library_include_directories(
     src/Data_processing;
     src/Handlers;
     src/Search_algorithms;
-    src/Servo)
+    src/Servo;
+    src/Misc)
 
 
 
