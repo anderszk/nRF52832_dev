@@ -1,8 +1,5 @@
 #include "data_processor.h"
 
-#define MIN_VALID_RSSI -90
-#define MAX_VALID_RSSI -25
-
 int16_t average_counter = 1;
 int16_t data_delta[10];
 int16_t data_zigma[10];
@@ -52,7 +49,7 @@ void update_matrix(matrix_x3 *data, int16_t *n){
 
     for(int i = 0; i < *n; i++){
         if(data[i].delta == 0 || data[i].zigma == 0){
-            printk("Changed values at: %d", data[i].encoder);
+            printk("Removed values at: %d", data[i].encoder);
             for(int pos = i; pos < *n-1; pos++){
                 data[pos].encoder = data[pos+1].encoder;
                 data[pos].delta = data[pos+1].delta;
@@ -87,12 +84,8 @@ int find_zero_point(matrix_x3 validated_values[], int n){
     }
 
     for(int i = (zero_point_index + 1); i < n-1; i++){
-        // if(validated_values[i].delta <= validated_values[i-1].delta && validated_values[i].delta <= validated_values[i+1].delta){
             if(validated_values[i].delta <= validated_values[zero_point_index].delta && zero_point_validater(validated_values[i].zigma, validated_values[i].delta, ZIGMA_ZERO_VALUE)){
-                // printk("Old index: %d, value %d\n", validated_values[zero_point_index].encoder, validated_values[zero_point_index].delta);
                 zero_point_index = i;
-                // printk("New index: %d, value %d\n", validated_values[zero_point_index].encoder, validated_values[zero_point_index].delta);
-            // }
         }
     }
     printk("encoder: %d, delta %d, zigma: %d\n", validated_values[zero_point_index].encoder, validated_values[zero_point_index].delta, validated_values[zero_point_index].zigma);

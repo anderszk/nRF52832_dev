@@ -1,5 +1,18 @@
 #include "encoder.h"
 #include <zephyr/types.h>
+
+/**
+ * @brief Minimum value for RSSI
+ * Minimum valid value for RSSI measurement, if values goes under this it becomes
+ * invalid and the measurement will not be used
+ */
+#define MIN_VALID_RSSI -90
+/**
+ * @brief Maximum value for RSSI
+ * Maximum valid value for RSSI measurement, if values goes over this it becomes
+ * invalid and the measurement will not be used 
+ */
+#define MAX_VALID_RSSI -25
 /**
  * @brief Values measured at one point.
  * This struct is used to store the measured values for encoder,

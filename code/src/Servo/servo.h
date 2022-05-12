@@ -1,6 +1,32 @@
 #include <zephyr.h>
 #include <logging/log.h>
 #include <drivers/gpio.h>
+
+/**
+ * @brief N for azimuth servomotor 
+ */
+#define servo_azimuth_N 0
+/**
+ * @brief Pin for azimuth servomotor 
+ */
+#define servo_azimuth_pin 2
+/**
+ * @brief N for elevation servomotor 
+ */
+#define servo_elevationl_N 1
+/**
+ * @brief Pin for elevation servomotor 
+ */
+#define servo_elevation_pin 3
+/**
+ * @brief N for antenna servomotor 
+ */
+#define servo_antenna_N 2
+/**
+ * @brief Pin for antenne servomotor
+ */
+#define servo_antenna_pin 4
+
 /**
  * @brief Init timer
  * 

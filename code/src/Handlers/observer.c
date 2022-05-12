@@ -21,7 +21,6 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 		static int counter = 0;
 		static int state = 0; // 0 = delta, 1 = zigma
 		if(state == 0){
-			rssi = KALMAN_DELTA(rssi);
 			send_data(rssi, counter, state);
 			counter +=1;
 			if(counter >= average_counter){
@@ -31,7 +30,6 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 			}
 		}
 		else if(state == 1){
-			rssi = KALMAN_ZIGMA(rssi);
 			send_data(rssi, counter, state);
 			counter += 1;
 			if(counter >= average_counter){

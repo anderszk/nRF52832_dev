@@ -1,4 +1,6 @@
 #include "observer.h"
+
+
 /**
  * @brief Activates search in azimuth
  * 0 to deactivate search in azimuth, 1 to activate search in azimuth

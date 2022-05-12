@@ -1,15 +1,10 @@
 #include "search.h"
 
-
-
-
 #define MY_STACK_SIZE 500
 #define MY_PRIORITY 7
 #define MAX_READINGS 270
 #define AZIMUTH_DEGREES 180
 #define ELEVATION_DEGREES 90
-
-
 
 extern struct k_sem my_sem;
 matrix_x3 readings[MAX_READINGS];
@@ -19,7 +14,6 @@ matrix_x3 elevation_readings[ELEVATION_DEGREES];
 
 uint32_t *azimuth_thread_servo_angle;
 uint32_t *elevation_thread_servo_angle;
-
 
 
 extern void azimuth_servo_thread(uint32_t *azimuth_thread_servo_angle){
@@ -60,7 +54,7 @@ zeros fine_search(zeros enc_values){
     zeros fine_zeros;
     if(FINE_ACTIVATE){
         if(SEARCH_AZIMUTH){
-            angle_move_servo(2,90);
+            angle_move_servo(2,86);
             k_msleep(2000);
             init_encoder_azimuth();
             printk("Starting fine search in Azimuth.\n");
@@ -73,7 +67,7 @@ zeros fine_search(zeros enc_values){
         }
         if(SEARCH_ELEVATION){
             k_msleep(1000);
-            angle_move_servo(2,0);
+            angle_move_servo(2,180);
             k_msleep(2000);
 
             printk("Starting fine search in Elevation.\n");
@@ -86,7 +80,7 @@ zeros fine_search(zeros enc_values){
             k_thread_suspend(my_tid_1);
 
             k_msleep(1000);
-            angle_move_servo(2,90);
+            angle_move_servo(2,86);
             k_msleep(2000);
         }
         printk("Fine search finished.\n");
@@ -105,12 +99,17 @@ zeros coarse_search(){
     int16_t min_encoder_search_elevation = 0;
     int16_t max_encoder_search_elevation = 50;
     int increment = 1;
-	int16_t size = (max_encoder_search_azimuth-min_encoder_search_azimuth)/increment;
-
+	int16_t size = (max_encoder_search_azimuth - min_encoder_search_azimuth) / increment;
+    k_thread_start(my_tid_0);
+    k_thread_start(my_tid_1);
+    k_thread_suspend(my_tid_0);
+    k_thread_suspend(my_tid_1);
+    
     printk("Starting coarse sweep in Azimuth.\n");
-
     if(SEARCH_AZIMUTH){
-        k_thread_start(my_tid_0);
+        set_average_counter(1);
+        init_encoder_azimuth();
+        k_thread_resume(my_tid_0);
         sweep_search(0, min_encoder_search_azimuth, max_encoder_search_azimuth,increment);
         get_readings(&azimuth_readings, &size);
         zero_point_index_azimuth = find_zero_point(azimuth_readings, size);
@@ -129,15 +128,15 @@ zeros coarse_search(){
 
     if (SEARCH_ELEVATION){
         k_msleep(1000);
-        angle_move_servo(2, 0);
+        angle_move_servo(2, 180);
         k_msleep(2000);
-
+        
         init_encoder_elevation();
-        set_average_counter(3);
-        size = (max_encoder_search_elevation-min_encoder_search_elevation)/increment;
+        set_average_counter(1);
+        size = (max_encoder_search_elevation - min_encoder_search_elevation) / increment;
 
         printk("Starting coarse sweep in Elevation\n");
-        k_thread_start(my_tid_1);
+        k_thread_resume(my_tid_1);
         sweep_search(1,min_encoder_search_elevation, max_encoder_search_elevation, increment);
         get_readings(&elevation_readings, &size);
         zero_point_index_elevation = find_zero_point(elevation_readings, size);
@@ -150,14 +149,16 @@ zeros coarse_search(){
         printk("Coarse sweep in Elevation done\n");
 
 
-        for(int i = 0; i < size; i++){
-            printk("%d,%d,%d \n", elevation_readings[i].encoder, elevation_readings[i].zigma, elevation_readings[i].delta);
-        }
+        // for(int i = 0; i < size; i++){
+        //     printk("%d,%d,%d \n", elevation_readings[i].encoder, elevation_readings[i].zigma, elevation_readings[i].delta);
+        // }
 
         k_msleep(1000);
-        angle_move_servo(2, 90);
+        angle_move_servo(2, 86);
         k_msleep(2000);
     }
+    
+    
     printk("Coarse search finished.\n");
 
     return coarse_zeros;
@@ -181,8 +182,8 @@ void sweep_search(int state, int16_t min_encoder_search, int16_t max_encoder_sea
         readings[index].encoder = buffer_data.encoder;
         readings[index].delta = buffer_data.delta;
         readings[index].zigma = buffer_data.zigma;
-
-        printk("%d,%d,%d\n",readings[index].encoder, readings[index].zigma, readings[index].delta);
+        
+        printk("Encoder: %d, Zigma: %d, Delta: %d\n",readings[index].encoder, readings[index].zigma, readings[index].delta);
         index+=1;
     }
     k_sem_give(&my_sem);
@@ -227,6 +228,7 @@ int16_t fine_sweeper(int state, int threshold_degrees, int threshold_search, int
     }
     else{
         angle_slow_move(state,temp_data[zero_point_index].encoder);
+        k_msleep(2000);
         return temp_data[zero_point_index].encoder;
         }
 }
@@ -250,6 +252,7 @@ void reset_readings(){
         memset(&readings[i], 0, sizeof readings[i]);
     }
 }
+
 
 
 

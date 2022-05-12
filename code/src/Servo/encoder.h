@@ -4,6 +4,31 @@
 
 
 /**
+ * @brief Pin for Encoder azimuth "a"
+ */
+#define pin_a_azimuth 26
+/**
+ * @brief Pin for Encoder azimuth "b"
+ */
+#define pin_b_azimuth 27
+/**
+ * @brief Pin for Encoder elevation "a"
+ */
+#define pin_a_elevation 30
+/**
+ * @brief Pin for Encoder elevation "b"
+ */
+#define pin_b_elevation 31
+/**
+ * @brief Starting angle for servomotor azimuth
+ */
+#define starting_angle_azimuth 0
+/**
+ * @brief Starting angle for servomotor elevation 
+ */
+#define starting_angle_elevation 0
+
+/**
  * @brief Initiates servos and encoder
  * This function initiates servomotor for azimuth plane, elevation plane and for the antenna before 
  * it moves the servomotors to starting positions. The function then resets the encoder values

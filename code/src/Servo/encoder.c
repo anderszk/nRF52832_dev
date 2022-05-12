@@ -1,22 +1,6 @@
 #include "encoder.h"
 
 
-
-#define servo_azimuth_N 0
-#define servo_azimuth_pin 2
-#define servo_elevationl_N 1
-#define servo_elevation_pin 3
-#define servo_antenna_N 2
-#define servo_antenna_pin 4
-
-#define pin_a_azimuth 26
-#define pin_b_azimuth 27
-#define pin_a_elevation 30
-#define pin_b_elevation 31
-
-#define starting_angle_azimuth 0
-#define starting_angle_elevation 0
-
 int16_t azimuth_encoder_value = 0;
 int16_t elevation_encoder_value = 0;
 int16_t azimuth_encoder_degrees;
@@ -121,8 +105,10 @@ int init_encoder_servos(){
     
     
     k_msleep(1000);
-    azimuth_encoder_value = starting_angle_azimuth * 23;
-    elevation_encoder_value = starting_angle_elevation * 23;
+    azimuth_encoder_degrees = starting_angle_azimuth;
+    elevation_encoder_degrees = starting_angle_elevation;
+    azimuth_encoder_value = azimuth_encoder_value * 23;
+    elevation_encoder_value = elevation_encoder_degrees * 23;
 
     IRQ_CONNECT(QDEC_IRQn, 4, nrfx_isr, nrfx_qdec_irq_handler, 0);
 	irq_enable(QDEC_IRQn);
@@ -137,12 +123,10 @@ void update_encoder(int N){
     if (N == 0){
         azimuth_encoder_value -= acc;
         azimuth_encoder_degrees = azimuth_encoder_value/23;
-        // printk("Azimuth enc: %d.\n",  (azimuth_encoder_degrees));
     }
     else if (N ==1){
         elevation_encoder_value += acc;
         elevation_encoder_degrees = elevation_encoder_value/23;
-        // printk("Elevation enc: %d.\n", elevation_encoder_degrees);
     }
     else{
         printk("Error, wrong encoder number.\n");
@@ -169,7 +153,6 @@ void angle_slow_move(int N, uint32_t angle){
 
     }
     if(size > 0){
-        // printk("going up, size: %d\n",size);
         for(int i = 0; i < size; i++){
             increment_servo(N);
             k_msleep(60);
@@ -177,7 +160,6 @@ void angle_slow_move(int N, uint32_t angle){
             }
         }
     else if(size < 0){
-        // printk("going down, size: %d\n", size);
         for(int i = 0; i > size; i--){
             decrement_servo(N);
             k_msleep(60);
@@ -193,3 +175,4 @@ int16_t get_encoder(int N){
         return elevation_encoder_degrees;
     }
 }
+

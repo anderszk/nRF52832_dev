@@ -1,15 +1,7 @@
 #include "buttons.h"
 
 
-
-
-//LEDS
-
-#define RUN_LED_BLINK_INTERVAL 1000
 extern struct k_sem my_sem;
-
-
-//
 extern const struct device *dev;
 
 void button_handler(uint32_t button_state, uint32_t has_changed){
@@ -18,7 +10,6 @@ void button_handler(uint32_t button_state, uint32_t has_changed){
     int button_pressed = 0;
 	if (has_changed & button_state){
 		switch (has_changed){
-			
 			case DK_BTN1_MSK:
 				button_pressed = 1;
                 increment_servo(N);

@@ -109,8 +109,8 @@ void angle_move_servo(int N, uint32_t angle)
     }
 
     else if(N == 2){
-        if (angle >= 90){angle = 90;} 
-        else if(angle <= 0){angle = 0;}
+        if (angle >= 180){angle = 180;} 
+        else if(angle <= 89){angle = 89;}
     }
 
 
