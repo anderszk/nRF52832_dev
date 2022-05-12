@@ -16,17 +16,21 @@ uint32_t *azimuth_thread_servo_angle;
 uint32_t *elevation_thread_servo_angle;
 
 
+
 extern void azimuth_servo_thread(uint32_t *azimuth_thread_servo_angle){
     while(1){
         angle_slow_move(0,*azimuth_thread_servo_angle);
+        angle_move_servo(2,85);
     }
 }               
 
 extern void elevation_servo_thread(uint32_t *elevation_thread_servo_angle){
     while(1){
-        angle_slow_move(1,*elevation_thread_servo_angle);       
+        angle_slow_move(1,*elevation_thread_servo_angle); 
+        angle_move_servo(2,180);  
     }
 }
+
 
 K_THREAD_DEFINE(my_tid_1, MY_STACK_SIZE,
                 elevation_servo_thread, &elevation_thread_servo_angle, NULL, NULL,
@@ -54,7 +58,6 @@ zeros fine_search(zeros enc_values){
     zeros fine_zeros;
     if(FINE_ACTIVATE){
         if(SEARCH_AZIMUTH){
-            angle_move_servo(2,86);
             k_msleep(2000);
             init_encoder_azimuth();
             printk("Starting fine search in Azimuth.\n");
@@ -67,7 +70,6 @@ zeros fine_search(zeros enc_values){
         }
         if(SEARCH_ELEVATION){
             k_msleep(1000);
-            angle_move_servo(2,180);
             k_msleep(2000);
 
             printk("Starting fine search in Elevation.\n");
@@ -80,7 +82,7 @@ zeros fine_search(zeros enc_values){
             k_thread_suspend(my_tid_1);
 
             k_msleep(1000);
-            angle_move_servo(2,86);
+            angle_move_servo(2,85);
             k_msleep(2000);
         }
         printk("Fine search finished.\n");
@@ -128,7 +130,6 @@ zeros coarse_search(){
 
     if (SEARCH_ELEVATION){
         k_msleep(1000);
-        angle_move_servo(2, 180);
         k_msleep(2000);
         
         init_encoder_elevation();
@@ -154,8 +155,6 @@ zeros coarse_search(){
         // }
 
         k_msleep(1000);
-        angle_move_servo(2, 86);
-        k_msleep(2000);
     }
     
     
@@ -182,7 +181,7 @@ void sweep_search(int state, int16_t min_encoder_search, int16_t max_encoder_sea
         readings[index].encoder = buffer_data.encoder;
         readings[index].delta = buffer_data.delta;
         readings[index].zigma = buffer_data.zigma;
-        
+
         printk("Encoder: %d, Zigma: %d, Delta: %d\n",readings[index].encoder, readings[index].zigma, readings[index].delta);
         index+=1;
     }
