@@ -128,8 +128,12 @@ def plot_nulls(data: list) -> None:
         data : str, list of data
         mode  : str, type of diagram
     """
-    theta = []
-    r = []
+    theta1 = []
+    theta2 = []
+    theta3 = []
+    r1 = []
+    r2 = []
+    r3 = []
     nulls = data[0]
     measurements1m = data[1][0:10]
     measurements5m = data[1][10:20]
@@ -147,34 +151,52 @@ Enter you option here: """)
         for index, val in enumerate(measurements1m):
             x = int(val[0])-int(nulls[0][0])
             y = int(val[1])-int(nulls[0][1])
-            theta.append(np.arctan2(y,x))
-            r.append(np.sqrt(x**2+y**2))
-        plt.polar(theta, r, 'b.', label="1 meter")
-        print("1m:", len(r), len(theta) )
-        r.clear()
-        theta.clear()
+            if (np.sqrt(x**2+y**2) in r1 and np.arctan2(y,x) in theta1):
+                plt.polar(np.arctan2(y,x), np.sqrt(x**2+y**2), 'b.', markersize=10)
+                plt.annotate('dbl', xy = (np.arctan2(y,x), np.sqrt(x**2+y**2)))
+                r1.append(np.sqrt(x**2+y**2))
+                theta1.append(np.arctan2(y,x))
+            else:
+                plt.polar(np.arctan2(y,x), np.sqrt(x**2+y**2), 'b.', markersize=10)
+                r1.append(np.sqrt(x**2+y**2))
+                theta1.append(np.arctan2(y,x))
+        line1, = plt.polar(theta1[1], r1[1], 'b.', label="1.0 meters", markersize=10)
 
-        # for index, val in enumerate(measurements5m):
-        #     x = int(val[0])-int(nulls[1][0])
-        #     y = int(val[1])-int(nulls[1][1])
-        #     theta.append(np.arctan2(y,x))
-        #     r.append(np.sqrt(x**2+y**2))
-        # plt.polar(theta, r, 'g.', label="5 meters")
-        # print("5m:", len(r), len(theta) )
-        # r.clear()
-        # theta.clear()
+        for index, val in enumerate(measurements5m):
+            x = int(val[0])-int(nulls[1][0])
+            y = int(val[1])-int(nulls[1][1])
+            if (np.sqrt(x**2+y**2) in r1 and np.arctan2(y,x) in theta1):
+                plt.polar(np.arctan2(y,x), np.sqrt(x**2+y**2), 'g.', markersize=5)
+                plt.annotate('dbl', xy = (np.arctan2(y,x), np.sqrt(x**2+y**2)))
+                r2.append(np.sqrt(x**2+y**2))
+                theta2.append(np.arctan2(y,x))
+            else:
+                plt.polar(np.arctan2(y,x), np.sqrt(x**2+y**2), 'g.', markersize=10)
+                r2.append(np.sqrt(x**2+y**2))
+                theta2.append(np.arctan2(y,x))
+        line2, = plt.polar(theta2[0], r2[0], 'g.', label="5.0 meters", markersize=10)
+  
 
-        # for index, val in enumerate(measurements10m):
-        #     x = int(val[0])-int(nulls[2][0])
-        #     y = int(val[1])-int(nulls[2][1])
-        #     theta.append(np.arctan2(y,x))
-        #     r.append(np.sqrt(x**2+y**2))
-        # plt.polar(theta, r, 'r.', label="10 meters")
-        # print("10m:", len(r), len(theta) )
-        ax.set_title("Nulls", va='bottom')
+        for index, val in enumerate(measurements10m):
+            x = int(val[0])-int(nulls[2][0])
+            y = int(val[1])-int(nulls[2][1])
+            if (np.sqrt(x**2+y**2) in r3 and np.arctan2(y,x) in theta3):
+                plt.polar(np.arctan2(y,x), np.sqrt(x**2+y**2), 'r.', markersize=10)
+                plt.annotate('dbl', xy = (np.arctan2(y,x), np.sqrt(x**2+y**2)))
+                r3.append(np.sqrt(x**2+y**2))
+                theta3.append(np.arctan2(y,x))
+            else:
+                plt.polar(np.arctan2(y,x), np.sqrt(x**2+y**2), 'r.', markersize=10)
+                r3.append(np.sqrt(x**2+y**2))
+                theta3.append(np.arctan2(y,x))
+        line3, = plt.polar(theta3[0], r3[0], 'r.', label="10.0 meters", markersize=10)
+
+        ax.set_title("Polarrepresentasjon av radiopeilinger i grader", va='bottom')
         ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
-        ax.grid(True,linewidth = 1)
-        ax.legend(loc="upper right", bbox_to_anchor=(1.3, 1.05))
+        ax.grid(True,linewidth = 0.5)
+        ax.legend(loc="upper right", bbox_to_anchor=(1.3, 1.0))
+        ax.set_xticklabels([])
+    
 
     elif inp == "2":
         xes = []
@@ -196,12 +218,12 @@ Enter you option here: """)
         plt.xticks(np.arange(-1.25, 1.5, 0.25))
         plt.yticks(np.arange(-1.25, 1.5, 0.25))
         plt.grid()
-        plt.plot(xes,ys, marker="o", markersize=5, linestyle="", label="Nullpunkter funnet")
+        plt.plot(xes,ys, marker="o", markersize=5, linestyle="", label="Radiopeilinger")
         plt.plot(0,0, marker="o", markersize=10,linestyle="" ,label="Referanse (nRF52832)")
-        plt.xlabel("Avvik fra referansepunkt [m]")
-        plt.ylabel("Avvik fra referansepunkt [m]")
+        plt.xlabel("Avvik i horisontalplanet fra senderantennen [m]")
+        plt.ylabel("Avvik i vertikalalplanet fra senderantennen [m]")
         plt.legend(loc="upper left")
-        plt.title("Resultat av fullskalatest ved 5m")
+        plt.title("Distanseavvik ved radiopeiling på 5.0 m")
 
     elif inp == "3":
         return

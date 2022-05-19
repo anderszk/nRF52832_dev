@@ -1,0 +1,37 @@
+\hypertarget{servo_8h_source}{}\doxysection{servo.\+h}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#include <zephyr.h>}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#include <logging/log.h>}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <drivers/gpio.h>}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#define servo\_azimuth\_N 0}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#define servo\_azimuth\_pin 2}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define servo\_elevationl\_N 1}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#define servo\_elevation\_pin 3}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#define servo\_antenna\_N 2}}
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#define servo\_antenna\_pin 4}}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{34 \textcolor{keywordtype}{int} timer\_init();}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{40 \textcolor{keywordtype}{int} timer\_start();}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{51 \textcolor{keywordtype}{int} servo\_init(uint32\_t N, \textcolor{keywordtype}{int} servo\_pin);}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{59 \textcolor{keywordtype}{void} angle\_move\_servo(\textcolor{keywordtype}{int} N, uint32\_t angle);}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{80 \textcolor{keywordtype}{void} raw\_move\_servo(\textcolor{keywordtype}{int} N, uint32\_t position);}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83 uint32\_t sin\_scaled(uint32\_t input, uint32\_t input\_max, uint32\_t output\_min, uint32\_t output\_max);}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{91 \textcolor{keywordtype}{void} increment\_servo(\textcolor{keywordtype}{int} N);}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{99 \textcolor{keywordtype}{void} decrement\_servo(\textcolor{keywordtype}{int} N);}
+\DoxyCodeLine{100 }
+\DoxyCodeLine{108 int16\_t get\_servo\_angle(\textcolor{keywordtype}{int} N);}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{110 }
+\DoxyCodeLine{111 }
+
+\end{DoxyCode}

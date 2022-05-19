@@ -1,0 +1,41 @@
+\hypertarget{data__processor_8h_source}{}\doxysection{data\+\_\+processor.\+h}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#include "{}encoder.h"{}}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#include <zephyr/types.h>}}
+\DoxyCodeLine{3 }
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#define MIN\_VALID\_RSSI -\/90}}
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#define MAX\_VALID\_RSSI -\/25}}
+\DoxyCodeLine{22 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{structdata__s}{data\_s}}}
+\DoxyCodeLine{23 \{}
+\DoxyCodeLine{24     int16\_t encoder;}
+\DoxyCodeLine{25     int16\_t delta;}
+\DoxyCodeLine{26     int16\_t zigma;}
+\DoxyCodeLine{27 \} \mbox{\hyperlink{structdata__s}{matrix\_x3}};}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{34 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{structdata__a}{data\_a}}}
+\DoxyCodeLine{35 \{}
+\DoxyCodeLine{36     int16\_t azimuth;}
+\DoxyCodeLine{37     int16\_t elevation;}
+\DoxyCodeLine{38 \} \mbox{\hyperlink{structdata__a}{zeros}};}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{50 \textcolor{keywordtype}{void} send\_data(int16\_t rssi, \textcolor{keywordtype}{int} index, \textcolor{keywordtype}{int} state);}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{58 \textcolor{keywordtype}{void} set\_average\_counter(int16\_t value);}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{66 int16\_t get\_average(int16\_t list[]);}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{75 \textcolor{keywordtype}{void} get\_data(\mbox{\hyperlink{structdata__s}{matrix\_x3}} *buffer\_data, \textcolor{keywordtype}{int} N);}
+\DoxyCodeLine{76 }
+\DoxyCodeLine{85 \textcolor{keywordtype}{void} value\_validater(\mbox{\hyperlink{structdata__s}{matrix\_x3}} *raw\_data, int16\_t *n);}
+\DoxyCodeLine{86 }
+\DoxyCodeLine{95 \textcolor{keywordtype}{void} update\_matrix(\mbox{\hyperlink{structdata__s}{matrix\_x3}} *data, int16\_t *n);}
+\DoxyCodeLine{96 }
+\DoxyCodeLine{109 \textcolor{keywordtype}{bool} zero\_point\_validater(int16\_t value\_zigma, int16\_t value\_delta, int16\_t ZIGMA\_ZERO\_VALUE);}
+\DoxyCodeLine{110 }
+\DoxyCodeLine{119 \textcolor{keywordtype}{int} find\_zero\_point(\mbox{\hyperlink{structdata__s}{matrix\_x3}} validated\_values[], \textcolor{keywordtype}{int} n);}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{129 int16\_t find\_zigma\_zero\_value(\mbox{\hyperlink{structdata__s}{matrix\_x3}} values[], \textcolor{keywordtype}{int} n);}
+\DoxyCodeLine{130 }
+
+\end{DoxyCode}
