@@ -41,6 +41,9 @@ int initiate_modules(){
 	set_average_counter(1);	
 	laser_set(1);
 
+	if(MOTOR_TEST){
+		k_sleep(K_FOREVER);
+	}
 
     return err;
 }

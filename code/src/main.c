@@ -18,6 +18,7 @@ void main(void)
 	k_sem_take(&my_sem, K_FOREVER);
 	k_msleep(2000);
 	
+
 	zero_enc_values = coarse_search();
 	printk("azimuth zero enc: %d, horizontal zero end: %d\n", zero_enc_values.azimuth, zero_enc_values.elevation);
 	zero_enc_values = fine_search(zero_enc_values);

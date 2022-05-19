@@ -50,7 +50,7 @@ void validate_servo_zero_moved(int N, uint32_t zero_point_servo_angle){
         printk("Robot moved to zero-point\n.");
         return;}
     else{
-        k_msleep(1000);
+        k_msleep(1500);
         validate_servo_zero_moved(N, zero_point_servo_angle);}
 }
 
@@ -95,6 +95,8 @@ zeros fine_search(zeros enc_values){
 zeros coarse_search(){
 
     zeros coarse_zeros;
+    coarse_zeros.azimuth = 0;
+    coarse_zeros.elevation = 0;
     int zero_point_index_azimuth, zero_point_index_elevation;
     int16_t min_encoder_search_azimuth = 0;
     int16_t max_encoder_search_azimuth = 180;

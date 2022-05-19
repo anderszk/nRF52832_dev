@@ -144,10 +144,10 @@ void decrement_servo(int N){
 int16_t get_servo_angle(int N){
     if(N == 0){
         // printk("Azimuth servomotor angle: %d\n", azimuth_servo_angle);
-        return azimuth_servo_angle;}
+        return azimuth_servo_angle - 45;}
     else if(N == 1){
         // printk("Horizontal angle: %d\n", horizontal_servo_angle);
-        return horizontal_servo_angle;}
+        return horizontal_servo_angle - 130;}
 }
 
 
