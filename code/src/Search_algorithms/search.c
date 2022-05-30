@@ -20,7 +20,7 @@ uint32_t *elevation_thread_servo_angle;
 extern void azimuth_servo_thread(uint32_t *azimuth_thread_servo_angle){
     while(1){
         angle_slow_move(0,*azimuth_thread_servo_angle);
-        angle_move_servo(2,85);
+        angle_move_servo(2,86);
     }
 }               
 

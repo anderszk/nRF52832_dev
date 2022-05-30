@@ -100,7 +100,7 @@ int init_encoder_servos(){
 		return err;
 	}
     angle_move_servo(servo_azimuth_N, starting_angle_azimuth);
-    angle_move_servo(servo_elevationl_N,starting_angle_elevation);
+    angle_move_servo(servo_elevationl_N,0);
     angle_move_servo(servo_antenna_N, 90);
     
     

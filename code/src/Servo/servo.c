@@ -110,7 +110,7 @@ void angle_move_servo(int N, uint32_t angle)
 
     else if(N == 2){
         if (angle >= 180){angle = 180;} 
-        else if(angle <= 89){angle = 89;}
+        else if(angle <= 90){angle = 90;}
     }
 
 
@@ -144,10 +144,10 @@ void decrement_servo(int N){
 int16_t get_servo_angle(int N){
     if(N == 0){
         // printk("Azimuth servomotor angle: %d\n", azimuth_servo_angle);
-        return azimuth_servo_angle - 45;}
+        return azimuth_servo_angle;}
     else if(N == 1){
         // printk("Horizontal angle: %d\n", horizontal_servo_angle);
-        return horizontal_servo_angle - 130;}
+        return horizontal_servo_angle;}
 }
 
 
