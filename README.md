@@ -91,16 +91,16 @@ NOTE: We used Digi-Key Electronics as distributor for all our parts in the parts
 
 ### Installation
 
-2. Clone the repo using:
+1. Clone the repo using:
    ```
    $git clone https://github.com/anderszk/nRF52832_dev.git
    ```
-3. Install SDK and Toolchain here:
+2. Install SDK and Toolchain here:
    ```
    https://www.nordicsemi.com/Products/Development-software/nRF5-SDK/Download#infotabs
    ```
-4. Connect the nRF52 Development kit to your computer
-5. Start building using the interface or ```CTRL+P -> build```
+3. Connect the nRF52 Development kit to your computer
+4. Start building using the interface or ```CTRL+P -> build```
   
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -124,11 +124,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-
-<!-- CONTACT -->
-## Contact
-
-contact person? - 
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
