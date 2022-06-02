@@ -68,6 +68,7 @@ NOTE: We used Digi-Key Electronics as distributor for all our parts in the parts
 | Coaxial cable 457,2 mm | 415-0029-018        | Cinch Connectivity Solutions Johnson | 2        | 133,53           | 267,06               |
 | Encoder cable          | CUI-435-1FT         | CUI Devices                          | 2        | 52,24            | 108,48               |
 | Evaluation board       | EK42442-01          | pSemi                                | 1        | 942,90           | 942,90               |
+| Hybrid Coupler		 | 3A0200			   | Anaren								  | 1        | -				| -					   |
 | Incremental encoder    | AMT102-2048-N4000-S | CUI Devices                          | 2        | 207,46           | 414,92               |
 | Jumper cables (I/O)    | 1528-1964-ND        | Adafruit Industries LLC              | 1        | 17,51            | 17,51                | 
 | Laser pointer          | 1528-1391-ND        | Adafruit Industries LLC              | 1        | 53,43            | 53,43                |
