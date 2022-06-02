@@ -82,7 +82,7 @@ NOTE: We used Digi-Key Electronics as distributor for all our parts in the parts
 
 
 ## Software
-| Software     | Software details     | Version          | Produser             |
+| Software     | Software details     | Version          | Producer             |
 | :----------- | :------------------- | :--------------- | :------------------- |
 | IDE          | Visual Studio Code   | 1.66 or later    | Microsoft            |
 | SDK          | nRF Connect SDK      | v.1.9.1 or later | Nordic Semiconductor |
